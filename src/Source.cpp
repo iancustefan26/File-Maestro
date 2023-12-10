@@ -41,6 +41,8 @@ int main() {
 		///the drawing stage
 		/// 
 		loadToolbar(window, light_dark_mode);
+		loadDiskSelection(window);
+		loadBetweenLine(window);
 		window.display();
 	}
 

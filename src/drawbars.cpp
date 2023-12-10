@@ -9,6 +9,9 @@ using namespace std::filesystem;
 
 bool loaded = false;
 //bool openCMD = false, openNotepad = false;
+sf::Color defaultColor(51, 53, 54);
+sf::Color hoverColor(7, 148, 224, 128);
+sf::Color clickedColor(224, 20, 75);
 
 void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector2f position) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
@@ -30,9 +33,6 @@ void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector
 }
 
 void drawIconBoxes(sf::RenderWindow& window, const float index, bool& view_mode) {
-    sf::Color defaultColor(51, 53, 54);
-    sf::Color hoverColor(7, 148, 224, 128);
-    sf::Color clickedColor(224, 20, 75);
 
     sf::RectangleShape iconBox(sf::Vector2f(70.f, 70.f));
     iconBox.setPosition(0.f + index, 0.f);
@@ -69,8 +69,6 @@ void drawIconBoxes(sf::RenderWindow& window, const float index, bool& view_mode)
 }
 
 void loadToolbar(sf::RenderWindow& window, bool& view_mode){
-	sf::Color defaultColor(51, 53, 54);
-  
     sf::RectangleShape toolbar(sf::Vector2f(window.getSize().x, 70.f));
     toolbar.setPosition(0.f, 0.f);
     toolbar.setFillColor(defaultColor);
@@ -82,4 +80,26 @@ void loadToolbar(sf::RenderWindow& window, bool& view_mode){
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/terminal_icon.png", window, sf::Vector2f(78.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/notepad_icon.png", window, sf::Vector2f(152.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/dark_light_mode_icon.png", window, sf::Vector2f(222.f, 10.f));
+
+    sf::RectangleShape line(sf::Vector2f(window.getSize().x, 3.f));
+
+    line.setFillColor(sf::Color::Black);
+    line.setPosition(0.f, 70.f);
+    window.draw(line);
+}
+
+void loadBetweenLine(sf::RenderWindow& window) {
+    sf::RectangleShape lineBetween(sf::Vector2f(4.f, window.getSize().y - 70.f));
+    lineBetween.setFillColor(sf::Color::Black);
+    lineBetween.setPosition(window.getSize().x / 2, 70.f);
+    window.draw(lineBetween);
+}
+
+void loadDiskSelection(sf::RenderWindow& window) {
+    sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
+    diskBar.setFillColor(defaultColor);
+    diskBar.setPosition(0.f, 73.f);
+    window.draw(diskBar);
+    diskBar.setPosition(window.getSize().x / 2 + 4, 73.f);
+    window.draw(diskBar);
 }
