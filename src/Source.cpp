@@ -27,6 +27,7 @@ int main() {
 		return EXIT_FAILURE;
 	}
 	///The main window loop
+	bool light_dark_mode = 0;
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -35,11 +36,11 @@ int main() {
 				return EXIT_SUCCESS;
 			}
 		}
-		window.clear(sf::Color::White);
+		window.clear(light_dark_mode == 0 ? sf::Color::White : sf::Color::Black);
 		///
 		///the drawing stage
 		/// 
-		loadToolbar(window);
+		loadToolbar(window, light_dark_mode);
 		window.display();
 	}
 

@@ -29,7 +29,7 @@ void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector
     }
 }
 
-void drawIconBoxes(sf::RenderWindow& window, const float index) {
+void drawIconBoxes(sf::RenderWindow& window, const float index, bool& view_mode) {
     sf::Color defaultColor(51, 53, 54);
     sf::Color hoverColor(7, 148, 224, 128);
     sf::Color clickedColor(224, 20, 75);
@@ -55,6 +55,11 @@ void drawIconBoxes(sf::RenderWindow& window, const float index) {
                 std::cout << "Opened Notepad" << "\n";
                 sf::sleep(sf::milliseconds(60));
             }
+            else if (index == 210) {
+                view_mode == 0 ? view_mode = 1 : view_mode = 0;
+                std::cout << "Changed view mode";
+                sf::sleep(sf::milliseconds(60));
+            }
         }
     }
     else {
@@ -63,7 +68,7 @@ void drawIconBoxes(sf::RenderWindow& window, const float index) {
     window.draw(iconBox);
 }
 
-void loadToolbar(sf::RenderWindow& window) {
+void loadToolbar(sf::RenderWindow& window, bool& view_mode){
 	sf::Color defaultColor(51, 53, 54);
   
     sf::RectangleShape toolbar(sf::Vector2f(window.getSize().x, 70.f));
@@ -72,7 +77,7 @@ void loadToolbar(sf::RenderWindow& window) {
 
     window.draw(toolbar);
     for (int i = 0; i < 4; ++i)
-        drawIconBoxes(window, i * 70);
+        drawIconBoxes(window, i * 70, view_mode);
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/refresh_icon.png", window, sf::Vector2f(8.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/terminal_icon.png", window, sf::Vector2f(78.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/notepad_icon.png", window, sf::Vector2f(152.f, 10.f));

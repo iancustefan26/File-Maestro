@@ -2,6 +2,6 @@
 #define DRAWBARS_H
 #include <SFML/Graphics.hpp>
 
-void drawToolbar(sf::RenderWindow& window);
+void loadToolbar(sf::RenderWindow& window, bool& view_mode);
 
 #endif
