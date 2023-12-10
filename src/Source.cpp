@@ -11,7 +11,7 @@ using namespace std::filesystem;
 
 int main() {
 	//Rendering window with icon
-	sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), "My Commander");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), "File Maestro");
 	sf::Image icon;
 	if (icon.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/window_icon.png")) {
 		window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
