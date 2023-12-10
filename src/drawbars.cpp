@@ -57,7 +57,7 @@ void drawIconBoxes(sf::RenderWindow& window, const float index, bool& view_mode)
             }
             else if (index == 210) {
                 view_mode == 0 ? view_mode = 1 : view_mode = 0;
-                std::cout << "Changed view mode";
+                std::cout << "Changed view mode" << "\n";
                 sf::sleep(sf::milliseconds(60));
             }
         }
