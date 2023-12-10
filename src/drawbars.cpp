@@ -75,7 +75,7 @@ void loadToolbar(sf::RenderWindow& window, bool& view_mode){
 
     window.draw(toolbar);
     for (int i = 0; i < 4; ++i)
-        drawIconBoxes(window, i * 70, view_mode);
+        drawIconBoxes(window, i * 70.f, view_mode);
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/refresh_icon.png", window, sf::Vector2f(8.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/terminal_icon.png", window, sf::Vector2f(78.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/notepad_icon.png", window, sf::Vector2f(152.f, 10.f));
