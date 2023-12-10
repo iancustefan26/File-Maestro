@@ -39,7 +39,7 @@ int main() {
 		///
 		///the drawing stage
 		/// 
-		drawToolbar(window);
+		loadToolbar(window);
 		window.display();
 	}
 

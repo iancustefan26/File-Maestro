@@ -2,11 +2,13 @@
 #include <filesystem>
 #include <drawbars.h>
 #include <iostream>
+#include <cstdlib>
 #define WINDOW_W 1920
 #define WINDOW_H 1080
 using namespace std::filesystem;
 
 bool loaded = false;
+//bool openCMD = false, openNotepad = false;
 
 void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector2f position) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
@@ -41,8 +43,19 @@ void drawIconBoxes(sf::RenderWindow& window, const float index) {
 
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
         iconBox.setFillColor(hoverColor);
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
+            if (index == 70) {
+                system("cmd /c start cmd");
+                std::cout << "Opened CMD" << "\n";
+                sf::sleep(sf::milliseconds(60));
+            }
+            else if (index == 140) {
+                system("notepad");
+                std::cout << "Opened Notepad" << "\n";
+                sf::sleep(sf::milliseconds(60));
+            }
+        }
     }
     else {
         iconBox.setFillColor(defaultColor);
@@ -50,7 +63,7 @@ void drawIconBoxes(sf::RenderWindow& window, const float index) {
     window.draw(iconBox);
 }
 
-void drawToolbar(sf::RenderWindow& window) {
+void loadToolbar(sf::RenderWindow& window) {
 	sf::Color defaultColor(51, 53, 54);
   
     sf::RectangleShape toolbar(sf::Vector2f(window.getSize().x, 70.f));
