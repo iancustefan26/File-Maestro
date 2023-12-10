@@ -3,15 +3,20 @@
 #include <filesystem>
 #include "filesize.h"
 #include "buttons.h"
+#include "drawbars.h"
 #define WINDOW_W 1920
 #define WINDOW_H 1080
 using namespace std::filesystem;
 
-
-
 int main() {
-	//Rendering window with icon
+	//Rendering window
 	sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), "File Maestro");
+
+	///Center the window in the middle of the screen
+	window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - WINDOW_W / 2,
+			sf::VideoMode::getDesktopMode().height / 2 - WINDOW_H / 2));
+	//Render the window icon
+
 	sf::Image icon;
 	if (icon.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/window_icon.png")) {
 		window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
@@ -30,10 +35,11 @@ int main() {
 				return EXIT_SUCCESS;
 			}
 		}
-		window.clear();
+		window.clear(sf::Color::White);
 		///
 		///the drawing stage
 		/// 
+		drawToolbar(window);
 		window.display();
 	}
 
