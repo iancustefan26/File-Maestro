@@ -32,7 +32,7 @@ void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector
     }
 }
 
-void drawIconBoxes(sf::RenderWindow& window, const float index, bool& view_mode) {
+void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& view_mode) {
 
     sf::RectangleShape iconBox(sf::Vector2f(70.f, 70.f));
     iconBox.setPosition(0.f + index, 0.f);
@@ -75,7 +75,7 @@ void loadToolbar(sf::RenderWindow& window, bool& view_mode){
 
     window.draw(toolbar);
     for (int i = 0; i < 4; ++i)
-        drawIconBoxes(window, i * 70.f, view_mode);
+        drawIconBoxesToolbar(window, i * 70.f, view_mode);
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/refresh_icon.png", window, sf::Vector2f(8.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/terminal_icon.png", window, sf::Vector2f(78.f, 10.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/notepad_icon.png", window, sf::Vector2f(152.f, 10.f));
@@ -95,6 +95,34 @@ void loadBetweenLine(sf::RenderWindow& window) {
     window.draw(lineBetween);
 }
 
+void drawIconBoxesDisk(sf::RenderWindow& window, const float index) {
+    static bool isSelected = false; // Static variable to retain state across function calls
+
+    sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
+    iconBox.setPosition(0.f + index, 73.f);
+
+    sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+    // Check if the mouse is over the icon box
+    if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+        iconBox.setFillColor(hoverColor);
+        // Check if the left mouse button is pressed
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            isSelected = !isSelected; // Toggle the selection state
+        }
+    }
+    else {
+        iconBox.setFillColor(defaultColor);
+    }
+
+    // Set the color based on the selection state
+    iconBox.setFillColor(isSelected ? clickedColor : iconBox.getFillColor());
+
+    window.draw(iconBox);
+}
+
+
 void loadDiskSelection(sf::RenderWindow& window) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
     diskBar.setFillColor(defaultColor);
@@ -102,4 +130,7 @@ void loadDiskSelection(sf::RenderWindow& window) {
     window.draw(diskBar);
     diskBar.setPosition(window.getSize().x / 2 + 4, 73.f);
     window.draw(diskBar);
+    for (int i = 0; i < 4; ++i)
+        drawIconBoxesDisk(window, 70.f * i);
+
 }
