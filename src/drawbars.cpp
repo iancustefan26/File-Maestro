@@ -96,7 +96,7 @@ void loadBetweenLine(sf::RenderWindow& window) {
     window.draw(lineBetween);
 }
 
-void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_mode) {
+void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_mode, std::string &currentDisk) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
     iconBox.setPosition(0.f + index, 73.f);
     iconBox.setFillColor(defaultColor);
@@ -108,6 +108,12 @@ void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_m
         iconBox.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
+            if (index == 0)
+                currentDisk = "C:/";
+            if (index == 60)
+                currentDisk = "D:/";
+            if (index == 120)
+                currentDisk = "E:/";
         }
     }
     else {
@@ -143,7 +149,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
     }
 }
 
-void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode) {
+void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
     diskBar.setFillColor(defaultColor);
     diskBar.setPosition(0.f, 73.f);
@@ -151,7 +157,7 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     diskBar.setPosition(window.getSize().x / 2 + 4, 73.f);
     window.draw(diskBar);
     for (int i = 0; i < numberOfDrives; ++i)
-        drawIconBoxesDisk(window, 60.f * i, view_mode);
+        drawIconBoxesDisk(window, 60.f * i, view_mode, currentDisk);
     /*
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/d_drive.png", window, sf::Vector2f(68.f, 73.f));
@@ -167,5 +173,5 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
         }
         renderIcon(path, window, sf::Vector2f(8.f + 60.f * i, 73.f));
     }
-    drawDiskSpace("C:/", getSizeOfDrive("C:/"), window);
+    drawDiskSpace(currentDisk, getSizeOfDrive(currentDisk), window);
 }

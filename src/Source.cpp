@@ -10,6 +10,7 @@
 using namespace std::filesystem;
 
 int numberOfDrives = getNumberOfDrives();
+std::string currentDisk = "C:/";
 
 int main() {
 	//Rendering window
@@ -44,7 +45,7 @@ int main() {
 		///the drawing stage
 		/// 
 		loadToolbar(window, light_dark_mode);
-		loadDiskSelection(window, numberOfDrives, light_dark_mode);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk);
 		loadBetweenLine(window);
 		window.display();
 	}
