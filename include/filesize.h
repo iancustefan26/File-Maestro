@@ -13,5 +13,7 @@ void createDirInPath(path& myPath, const std::string fileName);
 
 int getNumberOfDrives();
 
+std::string getSizeOfDrive(std::string path);
+
 #endif // !FILESIZE_H
 

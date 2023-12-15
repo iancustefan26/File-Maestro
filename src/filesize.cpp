@@ -52,3 +52,47 @@ int getNumberOfDrives() {
 
     return count;
 }
+
+std::string uint2str(uintmax_t a) {
+    if (a == -1) {
+        return "<DIR>";
+    }
+    else if (a == 0) {
+        return "0";
+    }
+
+    std::string stringNumber;
+
+    while (a) {
+        stringNumber.insert(stringNumber.begin(), char(a % 10 + '0'));
+        a /= 10;
+    }
+
+    return stringNumber;
+}
+
+std::string compressSize(uintmax_t sizeToCompress) {
+    std::string dim = " KMGT";
+    double doubleSize = sizeToCompress;
+    unsigned long long intSize = 0;
+    int dimIterator = 0;
+
+    while (doubleSize > 999) {
+        doubleSize /= 1024;
+        intSize = (unsigned long long)(doubleSize * 10);
+        dimIterator++;
+    }
+
+    std::string driveSize = uint2str(intSize / 10);
+    std::string dimLetter = "";
+
+    if (dim[dimIterator] != ' ') {
+        dimLetter = dim[dimIterator];
+    }
+    return driveSize + "." + uint2str(intSize % 10) + " " + dimLetter + "B";
+}
+
+std::string getSizeOfDrive(std::string path) {
+    space_info size = space(path);
+    return compressSize(size.free) + " free of " + compressSize(size.capacity);
+}

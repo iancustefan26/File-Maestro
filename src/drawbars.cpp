@@ -115,6 +115,12 @@ void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_m
     window.draw(iconBox);
 }
 
+void loadBetweenLineDrivesSpace(sf::RenderWindow &window) {
+    sf::RectangleShape line(sf::Vector2f(2.f, 60.f));
+    line.setFillColor(sf::Color::Black);
+    line.setPosition(window.getSize().x / 2 - 270.f, 73.f);
+    window.draw(line);
+}
 
 void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
@@ -129,6 +135,7 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/d_drive.png", window, sf::Vector2f(68.f, 73.f));
     */
+    loadBetweenLineDrivesSpace(window);
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
     for (int i = 1; i < numberOfDrives; ++i) {
         char c = 'c' + i;
