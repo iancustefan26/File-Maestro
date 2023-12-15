@@ -9,6 +9,8 @@
 #define WINDOW_H 720
 using namespace std::filesystem;
 
+int numberOfDIrevs = getNumberOfDrives();
+
 int main() {
 	//Rendering window
 	sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), "File Maestro");
@@ -42,7 +44,7 @@ int main() {
 		///the drawing stage
 		/// 
 		loadToolbar(window, light_dark_mode);
-		loadDiskSelection(window);
+		loadDiskSelection(window, numberOfDIrevs, light_dark_mode);
 		loadBetweenLine(window);
 		window.display();
 	}

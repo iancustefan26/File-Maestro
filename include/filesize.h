@@ -11,5 +11,7 @@ void listFilesFromDir(const path& dir);
 
 void createDirInPath(path& myPath, const std::string fileName);
 
+int getNumberOfDrives();
+
 #endif // !FILESIZE_H
 

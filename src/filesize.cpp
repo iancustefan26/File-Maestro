@@ -39,3 +39,16 @@ void createDirInPath(path& myPath, const std::string fileName) {
         else
             std::cout << "Directory doensn't exist!";
 }
+
+
+int getNumberOfDrives() {
+    int count = 0;
+    for (char driveLetter = 'A'; driveLetter <= 'Z'; ++driveLetter){
+        std::string rootPath = std::string(1, driveLetter) + ":\\";
+        if (exists(rootPath)) {
+            count++;
+        }
+    }
+
+    return count;
+}

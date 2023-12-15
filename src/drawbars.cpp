@@ -33,7 +33,6 @@ void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector
 }
 
 void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& view_mode) {
-
     sf::RectangleShape iconBox(sf::Vector2f(70.f, 70.f));
     iconBox.setPosition(0.f + index, 0.f);
     iconBox.setFillColor(defaultColor);
@@ -95,42 +94,44 @@ void loadBetweenLine(sf::RenderWindow& window) {
     window.draw(lineBetween);
 }
 
-void drawIconBoxesDisk(sf::RenderWindow& window, const float index) {
-    static bool isSelected = false; // Static variable to retain state across function calls
-
+void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_mode) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
     iconBox.setPosition(0.f + index, 73.f);
+    iconBox.setFillColor(defaultColor);
 
     sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
-    // Check if the mouse is over the icon box
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
         iconBox.setFillColor(hoverColor);
-        // Check if the left mouse button is pressed
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            isSelected = !isSelected; // Toggle the selection state
+            iconBox.setFillColor(clickedColor);
         }
     }
     else {
         iconBox.setFillColor(defaultColor);
     }
-
-    // Set the color based on the selection state
-    iconBox.setFillColor(isSelected ? clickedColor : iconBox.getFillColor());
-
     window.draw(iconBox);
 }
 
 
-void loadDiskSelection(sf::RenderWindow& window) {
+void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
     diskBar.setFillColor(defaultColor);
     diskBar.setPosition(0.f, 73.f);
     window.draw(diskBar);
     diskBar.setPosition(window.getSize().x / 2 + 4, 73.f);
     window.draw(diskBar);
-    for (int i = 0; i < 4; ++i)
-        drawIconBoxesDisk(window, 70.f * i);
-
+    for (int i = 0; i < numberOfDrives; ++i)
+        drawIconBoxesDisk(window, 60.f * i, view_mode);
+    /*
+    renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
+    renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/d_drive.png", window, sf::Vector2f(68.f, 73.f));
+    */
+    renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
+    for (int i = 1; i < numberOfDrives; ++i) {
+        char c = 'c' + i;
+        std::string path = "C:/PROIECT IP ORIGINAL/My Commander/assets/icons/" + std::string(1, c) + "_drive.png";
+        renderIcon(path, window, sf::Vector2f(8.f + 60.f * i, 73.f));
+    }
 }
