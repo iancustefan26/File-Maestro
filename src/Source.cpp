@@ -9,7 +9,7 @@
 #define WINDOW_H 720
 using namespace std::filesystem;
 
-int numberOfDIrevs = getNumberOfDrives();
+int numberOfDrives = getNumberOfDrives();
 
 int main() {
 	//Rendering window
@@ -44,7 +44,7 @@ int main() {
 		///the drawing stage
 		/// 
 		loadToolbar(window, light_dark_mode);
-		loadDiskSelection(window, numberOfDIrevs, light_dark_mode);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode);
 		loadBetweenLine(window);
 		window.display();
 	}
