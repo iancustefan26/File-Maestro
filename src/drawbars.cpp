@@ -154,8 +154,10 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     diskBar.setFillColor(defaultColor);
     diskBar.setPosition(0.f, 73.f);
     window.draw(diskBar);
+    /*
     diskBar.setPosition(window.getSize().x / 2 + 4, 73.f);
     window.draw(diskBar);
+    */
     for (int i = 0; i < numberOfDrives; ++i)
         drawIconBoxesDisk(window, 60.f * i, view_mode, currentDisk);
     /*
