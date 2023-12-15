@@ -9,6 +9,7 @@ using namespace std::filesystem;
 
 bool loaded = false;
 bool loadedDrives = false;
+bool loadedSize = false;
 //bool openCMD = false, openNotepad = false;
 sf::Color defaultColor(51, 53, 54);
 sf::Color hoverColor(7, 148, 224, 128);
@@ -122,6 +123,26 @@ void loadBetweenLineDrivesSpace(sf::RenderWindow &window) {
     window.draw(line);
 }
 
+void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window) {
+    sf::Text text;
+    sf::Font font;
+     
+    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/quicksand.ttf")) {
+        std::cerr << "Couldn't load the font quicksand for diskspace";
+        return;
+    }
+    text.setFont(font);
+    text.setFillColor(sf::Color::White);
+    text.setString(space);
+    text.setCharacterSize(21);
+    text.setPosition(window.getSize().x / 2 - 250.f, 90.f);
+    window.draw(text);
+    if (!loadedSize) {
+        std::cout << "Loaded the space of the drive..." << "\n";
+        loadedSize = true;
+    }
+}
+
 void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
     diskBar.setFillColor(defaultColor);
@@ -146,4 +167,5 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
         }
         renderIcon(path, window, sf::Vector2f(8.f + 60.f * i, 73.f));
     }
+    drawDiskSpace("C:/", getSizeOfDrive("C:/"), window);
 }
