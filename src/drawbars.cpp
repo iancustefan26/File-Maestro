@@ -8,6 +8,7 @@
 using namespace std::filesystem;
 
 bool loaded = false;
+bool loadedDrives = false;
 //bool openCMD = false, openNotepad = false;
 sf::Color defaultColor(51, 53, 54);
 sf::Color hoverColor(7, 148, 224, 128);
@@ -24,7 +25,7 @@ void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector
         sf::Sprite iconSprite(iconTexture);
         iconSprite.setPosition(position); ///inital 8.f, 10.f -> 70.f mai in dreapta(x)
         window.draw(iconSprite);
-        if (!loaded) std::cout << "Loaded toolbar icon..." << "\n", loaded = true;
+        if (!loaded) std::cout << "Loaded toolbar icons..." << "\n", loaded = true;
     }
     else {
         if(!loaded) std::cerr << "Error when loading the toolbar icon!" << "\n", loaded = true;
@@ -132,6 +133,10 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     for (int i = 1; i < numberOfDrives; ++i) {
         char c = 'c' + i;
         std::string path = "C:/PROIECT IP ORIGINAL/My Commander/assets/icons/" + std::string(1, c) + "_drive.png";
+        if (!loadedDrives) {
+            loadedDrives = true;
+            std::cout << "Loaded drives.." << "\n";
+        }
         renderIcon(path, window, sf::Vector2f(8.f + 60.f * i, 73.f));
     }
 }
