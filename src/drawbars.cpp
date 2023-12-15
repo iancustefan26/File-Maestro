@@ -3,8 +3,8 @@
 #include <drawbars.h>
 #include <iostream>
 #include <cstdlib>
-#define WINDOW_W 1920
-#define WINDOW_H 1080
+#define WINDOW_W 1280
+#define WINDOW_H 720
 using namespace std::filesystem;
 
 bool loaded = false;
