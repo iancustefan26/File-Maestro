@@ -48,6 +48,7 @@ int main() {
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1);
+		loadPathBar(window, light_dark_mode, 0);
 		loadBetweenLine(window);
 		window.display();
 	}

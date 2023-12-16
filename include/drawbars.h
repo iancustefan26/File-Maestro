@@ -9,4 +9,6 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
 
 void loadBetweenLine(sf::RenderWindow& window);
 
+void loadPathBar(sf::RenderWindow& window, bool &view_mode, bool side);
+
 #endif

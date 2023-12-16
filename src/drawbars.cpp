@@ -114,12 +114,28 @@ void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_m
                 currentDisk = "D:/";
             if (index == 120)
                 currentDisk = "E:/";
+            if (index == 180)
+                currentDisk = "F:/";
+            if (index == 240)
+                currentDisk = "G:/";
+            if (index == 300)
+                currentDisk = "H:/";
+            if (index == 360)
+                currentDisk = "I:/";
             if (index == 0 + window.getSize().x / 2)
                 currentDisk = "C:/";
             if (index == 60 + window.getSize().x / 2)
                 currentDisk = "D:/";
             if (index == 120 + window.getSize().x / 2)
                 currentDisk = "E:/";
+            if (index == 180 + window.getSize().x / 2)
+                currentDisk = "F:/";
+            if (index == 240 + window.getSize().x / 2)
+                currentDisk = "G:/";
+            if (index == 300 + window.getSize().x / 2)
+                currentDisk = "H:/";
+            if (index == 360 + window.getSize().x / 2)
+                currentDisk = "I:/";
         }
     }
     else {
@@ -182,4 +198,17 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
         renderIcon(path, window, sf::Vector2f(8.f + 60.f * i + window.getSize().x / 2 * side, 73.f));
     }
     drawDiskSpace(currentDisk, getSizeOfDrive(currentDisk), window, side);
+}
+
+void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side) {
+    sf::RectangleShape pathBar(sf::Vector2f(window.getSize().x / 2, 40.f));
+    pathBar.setFillColor(defaultColor);
+    pathBar.setPosition(0.f + window.getSize().x / 2 * side, 135.f);
+    window.draw(pathBar);
+    sf::RectangleShape line(sf::Vector2f(window.getSize().x / 2, 2.f));
+    line.setFillColor(sf::Color::Black);
+    line.setPosition(0.f + window.getSize().x / 2 * side, 133.f);
+    window.draw(line);
+    line.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
+    window.draw(line);
 }
