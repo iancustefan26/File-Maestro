@@ -114,6 +114,12 @@ void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_m
                 currentDisk = "D:/";
             if (index == 120)
                 currentDisk = "E:/";
+            if (index == 0 + window.getSize().x / 2)
+                currentDisk = "C:/";
+            if (index == 60 + window.getSize().x / 2)
+                currentDisk = "D:/";
+            if (index == 120 + window.getSize().x / 2)
+                currentDisk = "E:/";
         }
     }
     else {
@@ -122,14 +128,14 @@ void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_m
     window.draw(iconBox);
 }
 
-void loadBetweenLineDrivesSpace(sf::RenderWindow &window) {
+void loadBetweenLineDrivesSpace(sf::RenderWindow &window, bool side) {
     sf::RectangleShape line(sf::Vector2f(2.f, 60.f));
     line.setFillColor(sf::Color::Black);
-    line.setPosition(window.getSize().x / 2 - 270.f, 73.f);
+    line.setPosition(window.getSize().x / 2 - 270.f + window.getSize().x / 2 * side, 73.f);
     window.draw(line);
 }
 
-void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window) {
+void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window, bool side) {
     sf::Text text;
     sf::Font font;
      
@@ -141,7 +147,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
     text.setFillColor(sf::Color::White);
     text.setString(space);
     text.setCharacterSize(21);
-    text.setPosition(window.getSize().x / 2 - 250.f, 90.f);
+    text.setPosition(window.getSize().x / 2 - 250.f + window.getSize().x / 2 * side, 90.f);
     window.draw(text);
     if (!loadedSize) {
         std::cout << "Loaded the space of the drive..." << "\n";
@@ -149,23 +155,23 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
     }
 }
 
-void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk) {
+void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
     diskBar.setFillColor(defaultColor);
-    diskBar.setPosition(0.f, 73.f);
+    diskBar.setPosition(0.f + window.getSize().x / 2 * side, 73.f);
     window.draw(diskBar);
     /*
     diskBar.setPosition(window.getSize().x / 2 + 4, 73.f);
     window.draw(diskBar);
     */
     for (int i = 0; i < numberOfDrives; ++i)
-        drawIconBoxesDisk(window, 60.f * i, view_mode, currentDisk);
+        drawIconBoxesDisk(window, (60.f * i) + window.getSize().x / 2 * side, view_mode, currentDisk);
     /*
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/d_drive.png", window, sf::Vector2f(68.f, 73.f));
     */
-    loadBetweenLineDrivesSpace(window);
-    renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
+    loadBetweenLineDrivesSpace(window, side);
+    renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f + window.getSize().x / 2 * side, 83.f));
     for (int i = 1; i < numberOfDrives; ++i) {
         char c = 'c' + i;
         std::string path = "C:/PROIECT IP ORIGINAL/My Commander/assets/icons/" + std::string(1, c) + "_drive.png";
@@ -173,7 +179,7 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
             loadedDrives = true;
             std::cout << "Loaded drives.." << "\n";
         }
-        renderIcon(path, window, sf::Vector2f(8.f + 60.f * i, 73.f));
+        renderIcon(path, window, sf::Vector2f(8.f + 60.f * i + window.getSize().x / 2 * side, 73.f));
     }
-    drawDiskSpace(currentDisk, getSizeOfDrive(currentDisk), window);
+    drawDiskSpace(currentDisk, getSizeOfDrive(currentDisk), window, side);
 }
