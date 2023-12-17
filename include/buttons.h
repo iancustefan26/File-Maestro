@@ -4,4 +4,6 @@
 
 void drawCommandButtons(sf::RenderWindow& window);
 
+void drawSortButtons(sf::RenderWindow& window);
+
 #endif // !BUTTONS_H

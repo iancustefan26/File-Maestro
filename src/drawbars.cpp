@@ -3,6 +3,8 @@
 #include <drawbars.h>
 #include <iostream>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 #define WINDOW_W 1280
 #define WINDOW_H 720
 using namespace std::filesystem;
@@ -61,6 +63,7 @@ void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& vie
                 std::cout << "Changed view mode" << "\n";
                 sf::sleep(sf::milliseconds(60));
             }
+            std::this_thread::sleep_for(std::chrono::milliseconds(60));
         }
     }
     else {

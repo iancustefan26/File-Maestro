@@ -14,7 +14,7 @@ std::string currentDisk2 = "C:/";
 std::string currentDisk = "C:/";
 std::string currentPath = "C:/";
 std::string currentPath2 = "C:/";
-
+static bool selected[] = { 0, 0, 0, 0, 0, 0 };
 
 int main() {
 	//Rendering window

@@ -3,11 +3,13 @@
 #include <vector>
 #include <filesystem>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 using namespace std::filesystem;
 
 
-void makeButton(sf::RenderWindow& window, std::string name, float index) {
+void makeButton(sf::RenderWindow& window, std::string name, int index) {
     sf::Color defaultColor(51, 53, 54);
     sf::Color hoverColor(7, 148, 224, 128);
     sf::Color clickedColor(224, 20, 75);
@@ -27,9 +29,24 @@ void makeButton(sf::RenderWindow& window, std::string name, float index) {
         iconBox.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
+            /*
+            selected[index - 214 * num + num] = !selected[index - 214 * num + num];
+            if (selected[index - 214 * num + num] == 1) {
+                std::cout << "ok" << " ";
+                for (int i = 0; i < 6; ++i)
+                    if (index - 214 * num + num != i)
+                        selected[i] = 0;
+            }
+            
+            for (int i = 0; i < 6; ++i)
+                std::cout << selected[i] << " ";
+            std::cout << index - 214 * num + num << "\n";
+            std::this_thread::sleep_for(std::chrono::milliseconds(60));
+            */
         }
     }
     else {
+        //if (selected[index - 214 * num + num] == 1) iconBox.setFillColor(clickedColor);
         iconBox.setFillColor(defaultColor);
     }
 
@@ -63,6 +80,10 @@ void drawCommandButtons(sf::RenderWindow& window) {
 	buttonNames.push_back("F6 New Folder");
 	buttonNames.push_back("F7 Delete");
 	buttonNames.push_back("Alt+F4 Exit");
-	for (float i = 0; i < 6; ++i)
+	for (int i = 0; i < 6; ++i)
 		makeButton(window, buttonNames[i], 214.f * i);
+}
+
+void drawSortButtons(sf::RenderWindow& window) {
+
 }
