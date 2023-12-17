@@ -5,6 +5,7 @@
 #include "buttons.h"
 #include "drawbars.h"
 #include "sorts.h"
+#include "fileNavigator.h"
 #define WINDOW_W 1280
 #define WINDOW_H 720
 using namespace std::filesystem;
@@ -56,6 +57,8 @@ int main() {
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window);
 		drawCommandButtons(window);
+		drawFileBackground(window, 0);
+		drawFileBackground(window, 1);
 		window.display();
 	}
 
