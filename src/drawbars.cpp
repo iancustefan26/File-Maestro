@@ -96,7 +96,7 @@ void loadBetweenLine(sf::RenderWindow& window) {
     window.draw(lineBetween);
 }
 
-void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_mode, std::string &currentDisk) {
+void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_mode, std::string &currentDisk, std::string &currentPath) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
     iconBox.setPosition(0.f + index, 73.f);
     iconBox.setFillColor(defaultColor);
@@ -109,33 +109,33 @@ void drawIconBoxesDisk(sf::RenderWindow& window, const float index, bool &view_m
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
             if (index == 0)
-                currentDisk = "C:/";
+                currentDisk = currentPath = "C:/";
             if (index == 60)
-                currentDisk = "D:/";
+                currentDisk = currentPath = "D:/";
             if (index == 120)
-                currentDisk = "E:/";
+                currentDisk = currentPath = "E:/";
             if (index == 180)
-                currentDisk = "F:/";
+                currentDisk = currentPath = "F:/";
             if (index == 240)
-                currentDisk = "G:/";
+                currentDisk = currentPath = "G:/";
             if (index == 300)
-                currentDisk = "H:/";
+                currentDisk = currentPath = "H:/";
             if (index == 360)
-                currentDisk = "I:/";
+                currentDisk = currentPath = "I:/";
             if (index == 0 + window.getSize().x / 2)
-                currentDisk = "C:/";
+                currentDisk = currentPath = "C:/";
             if (index == 60 + window.getSize().x / 2)
-                currentDisk = "D:/";
+                currentDisk = currentPath = "D:/";
             if (index == 120 + window.getSize().x / 2)
-                currentDisk = "E:/";
+                currentDisk = currentPath = "E:/";
             if (index == 180 + window.getSize().x / 2)
-                currentDisk = "F:/";
+                currentDisk = currentPath = "F:/";
             if (index == 240 + window.getSize().x / 2)
-                currentDisk = "G:/";
+                currentDisk = currentPath = "G:/";
             if (index == 300 + window.getSize().x / 2)
-                currentDisk = "H:/";
+                currentDisk = currentPath = "H:/";
             if (index == 360 + window.getSize().x / 2)
-                currentDisk = "I:/";
+                currentDisk = currentPath = "I:/";
         }
     }
     else {
@@ -171,7 +171,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
     }
 }
 
-void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side) {
+void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side, std::string &currentPath) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
     diskBar.setFillColor(defaultColor);
     diskBar.setPosition(0.f + window.getSize().x / 2 * side, 73.f);
@@ -181,7 +181,7 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     window.draw(diskBar);
     */
     for (int i = 0; i < numberOfDrives; ++i)
-        drawIconBoxesDisk(window, (60.f * i) + window.getSize().x / 2 * side, view_mode, currentDisk);
+        drawIconBoxesDisk(window, (60.f * i) + window.getSize().x / 2 * side, view_mode, currentDisk, currentPath);
     /*
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/d_drive.png", window, sf::Vector2f(68.f, 73.f));
@@ -200,7 +200,7 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     drawDiskSpace(currentDisk, getSizeOfDrive(currentDisk), window, side);
 }
 
-void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side) {
+void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event &event, std::string &currentPath) {
     sf::RectangleShape pathBar(sf::Vector2f(window.getSize().x / 2, 40.f));
     pathBar.setFillColor(defaultColor);
     pathBar.setPosition(0.f + window.getSize().x / 2 * side, 135.f);
@@ -211,4 +211,36 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side) {
     window.draw(line);
     line.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
     window.draw(line);
+    /*
+    sf::Text inputText;
+    sf::String playerInput;
+    sf::Font font;
+    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/quicksand.ttf")) {
+        std::cerr << "Couldn't load the font quicksand for diskspace";
+        return;
+    }
+    inputText.setFont(font);
+    inputText.setFillColor(sf::Color::White);
+    inputText.setCharacterSize(24);
+    inputText.setPosition(pathBar.getPosition().x + 7.f, pathBar.getPosition().y + 7.f);
+    if (event.type == sf::Event::TextEntered) {
+        if (event.text.unicode < 128) {
+            playerInput += event.text.unicode;
+            inputText.setString(playerInput);
+        }
+    }
+    window.draw(inputText);
+    */
+    sf::Text pathText;
+    sf::Font font;
+    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/quicksand.ttf")) {
+        std::cerr << "Couldn't load the font quicksand for diskspace";
+        return;
+    }
+    pathText.setFillColor(sf::Color::White);
+    pathText.setCharacterSize(24);
+    pathText.setPosition(pathBar.getPosition().x + 7.f, pathBar.getPosition().y + 7.f);
+    pathText.setFont(font);
+    pathText.setString(currentPath);
+    window.draw(pathText);
 }
