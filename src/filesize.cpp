@@ -42,11 +42,17 @@ void createDirInPath(path& myPath, const std::string fileName) {
 
 
 int getNumberOfDrives() {
+    
     int count = 0;
-    for (char driveLetter = 'A'; driveLetter <= 'Z'; ++driveLetter){
+    for (char driveLetter = 'C'; driveLetter <= 'Z'; ++driveLetter){
         std::string rootPath = std::string(1, driveLetter) + ":\\";
-        if (exists(rootPath)) {
-            count++;
+        try {
+            if (exists(rootPath)) {
+                count++;
+            }
+        }
+        catch (const std::exception& e) {
+            std::cerr << "Exception: " << e.what() << std::endl;
         }
     }
 
