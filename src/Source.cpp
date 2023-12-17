@@ -14,7 +14,8 @@ std::string currentDisk2 = "C:/";
 std::string currentDisk = "C:/";
 std::string currentPath = "C:/";
 std::string currentPath2 = "C:/";
-static bool selected[] = { 0, 0, 0, 0, 0, 0 };
+static bool selected1[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
+static bool selected2[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 
 int main() {
 	//Rendering window
@@ -49,8 +50,8 @@ int main() {
 		///the drawing stage
 		/// 
 		loadToolbar(window, light_dark_mode);
-		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath);
-		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window);

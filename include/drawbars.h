@@ -5,7 +5,7 @@
 
 void loadToolbar(sf::RenderWindow& window, bool& view_mode);
 
-void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side, std::string &currentPath);
+void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side, std::string &currentPath, static bool selected[]);
 
 void loadBetweenLine(sf::RenderWindow& window);
 
