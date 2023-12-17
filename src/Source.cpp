@@ -59,6 +59,8 @@ int main() {
 		drawCommandButtons(window);
 		drawFileBackground(window, 0);
 		drawFileBackground(window, 1);
+		loadSortBar(window, light_dark_mode, 0);
+		loadSortBar(window, light_dark_mode, 1);
 		window.display();
 	}
 

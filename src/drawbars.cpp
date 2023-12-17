@@ -263,3 +263,12 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
     pathText.setString(currentPath);
     window.draw(pathText);
 }
+
+void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side) {
+    sf::RectangleShape sortBar(sf::Vector2f(window.getSize().x / 2, 25.f));
+    sortBar.setFillColor(sf::Color(22,22,23));
+    sortBar.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
+    if (side == 1)
+        sortBar.setPosition(0.f + window.getSize().x / 2 + 4.f, 175.f);
+    window.draw(sortBar);
+}

@@ -11,4 +11,6 @@ void loadBetweenLine(sf::RenderWindow& window);
 
 void loadPathBar(sf::RenderWindow& window, bool &view_mode, bool side, sf::Event &event, std::string &currentPath);
 
+void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side);
+
 #endif
