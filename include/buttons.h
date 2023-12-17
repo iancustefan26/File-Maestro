@@ -2,6 +2,6 @@
 #define BUTTONS_H
 #include <SFML/Graphics.hpp>
 
-void createButton(sf::RenderWindow& window, const sf::Vector2f& position, const sf::Vector2f& size, std::string name, sf::Font& font);
+void drawCommandButtons(sf::RenderWindow& window);
 
 #endif // !BUTTONS_H

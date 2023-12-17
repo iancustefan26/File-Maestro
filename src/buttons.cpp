@@ -1,33 +1,49 @@
-#include "buttons.h"
 #include <SFML/Graphics.hpp>
+#include "buttons.h"
+#include <vector>
+#include <filesystem>
+#include <iostream>
 
-void createButton(sf::RenderWindow& window, const sf::Vector2f& position, const sf::Vector2f& size, std::string name, sf::Font& font) {
-    sf::RectangleShape button(size);
-    sf::Color colorButt(196, 195, 192);
-    button.setPosition(position);
-    button.setFillColor(sf::Color::Green);
+using namespace std::filesystem;
 
-    sf::Text buttonText;
-    buttonText.setFillColor(sf::Color::Black);
-    buttonText.setString(name);
-    buttonText.setFont(font);
-    buttonText.setCharacterSize((size.x / 10 + size.y / 10) / 2);
 
-    sf::FloatRect textBounds = buttonText.getLocalBounds();
-    buttonText.setPosition(position.x + (size.x - textBounds.width) / 2, position.y + (size.y - textBounds.height) / 2);
+void makeButton(sf::RenderWindow& window, std::string name, float index) {
+    sf::Color defaultColor(51, 53, 54);
+    sf::Color hoverColor(7, 148, 224, 128);
+    sf::Color clickedColor(224, 20, 75);
 
-    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-    bool buttonClicked = false;
+    sf::RectangleShape iconBox(sf::Vector2f(213.f, 40.f));
+    iconBox.setPosition(0.f + index, 680.f);
+    iconBox.setFillColor(defaultColor);
 
-    if (button.getGlobalBounds().contains(mousePos)) {
-        button.setFillColor(sf::Mouse::isButtonPressed(sf::Mouse::Left) ? colorButt : sf::Color::Red);
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-            buttonClicked = true;
+    sf::RectangleShape line(sf::Vector2f(1.f, 40.f));
+    line.setFillColor(sf::Color::Black);
+    line.setPosition(iconBox.getPosition().x + 213.f, 680.f);
+
+    sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+    if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+        iconBox.setFillColor(hoverColor);
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            iconBox.setFillColor(clickedColor);
+        }
     }
-    else
-        button.setFillColor(sf::Color::Green);
+    else {
+        iconBox.setFillColor(defaultColor);
+    }
+    window.draw(iconBox);
+    window.draw(line);
+}
 
-
-    window.draw(button);
-    window.draw(buttonText);
+void drawCommandButtons(sf::RenderWindow& window) {
+	std::vector<std::string> buttonNames;
+	buttonNames.push_back("F3 Open");
+	buttonNames.push_back("F4 Copy");
+	buttonNames.push_back("F5 Move");
+	buttonNames.push_back("F6 New Folder");
+	buttonNames.push_back("F7 Delete");
+	buttonNames.push_back("Alt+F4 Exit");
+	for (float i = 0; i < 6; ++i)
+		makeButton(window, buttonNames[i], 214.f * i);
 }

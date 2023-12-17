@@ -155,7 +155,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
     sf::Text text;
     sf::Font font;
      
-    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/quicksand.ttf")) {
+    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf")) {
         std::cerr << "Couldn't load the font quicksand for diskspace";
         return;
     }
@@ -233,7 +233,7 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
     */
     sf::Text pathText;
     sf::Font font;
-    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/quicksand.ttf")) {
+    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf")) {
         std::cerr << "Couldn't load the font quicksand for diskspace";
         return;
     }

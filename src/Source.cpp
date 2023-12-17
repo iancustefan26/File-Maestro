@@ -15,6 +15,7 @@ std::string currentDisk = "C:/";
 std::string currentPath = "C:/";
 std::string currentPath2 = "C:/";
 
+
 int main() {
 	//Rendering window
 	sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), "File Maestro");
@@ -53,6 +54,7 @@ int main() {
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window);
+		drawCommandButtons(window);
 		window.display();
 	}
 
