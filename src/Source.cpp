@@ -37,7 +37,7 @@ int main() {
 		return EXIT_FAILURE;
 	}
 	///The main window loop
-	bool light_dark_mode = 0;
+	bool light_dark_mode = 1;
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
