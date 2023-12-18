@@ -264,11 +264,62 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
     window.draw(pathText);
 }
 
+void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::string name, int index) {
+    sf::RectangleShape iconBox(sf::Vector2f(160.f, 23.f));
+    iconBox.setPosition(0.f + index * iconBox.getSize().x + window.getSize().x / 2 * side, 176.f);
+    if (side == 1 && index == 0)
+        iconBox.setPosition(4.f + index + window.getSize().x / 2 * side, 176.f);
+    iconBox.setFillColor(sf::Color(22,22,23));
+
+    sf::RectangleShape line(sf::Vector2f(1.f, 23.f));
+    line.setFillColor(sf::Color::Black);
+    line.setPosition(iconBox.getPosition().x + iconBox.getSize().x, 175.f);
+
+    sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+    if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+        iconBox.setFillColor(hoverColor);
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            iconBox.setFillColor(clickedColor);
+        }
+    }
+    else {
+        iconBox.setFillColor(sf::Color(22,22,23));
+    }
+
+    sf::Text buttonText;
+    sf::Font font;
+    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf")) {
+        std::cerr << "Couldn't load the font quicksand for diskspace";
+        return;
+    }
+    buttonText.setFillColor(sf::Color::White);
+    buttonText.setFont(font);
+    buttonText.setCharacterSize(18);
+    buttonText.setString(name);
+    //buttonText.setPosition(iconBox.getPosition().x + 45.f, iconBox.getPosition().y + 4.f);
+    sf::Vector2f boxPosition(iconBox.getPosition().x, iconBox.getPosition().y);
+    sf::Vector2f boxSize(iconBox.getSize().x, iconBox.getSize().y);
+    sf::Vector2f textPosition;
+    textPosition.x = boxPosition.x + (boxSize.x - buttonText.getGlobalBounds().width) / 2;
+    textPosition.y = boxPosition.y + (boxSize.y - buttonText.getGlobalBounds().height) / 2 - 5.f;
+    buttonText.setPosition(textPosition);
+    window.draw(iconBox);
+    window.draw(buttonText);
+    window.draw(line);
+}
+
 void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side) {
     sf::RectangleShape sortBar(sf::Vector2f(window.getSize().x / 2, 25.f));
     sortBar.setFillColor(sf::Color(22,22,23));
     sortBar.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
     if (side == 1)
         sortBar.setPosition(0.f + window.getSize().x / 2 + 4.f, 175.f);
+
     window.draw(sortBar);
+    makeSortButton(window, view_mode, side, "Name", 0);
+    makeSortButton(window, view_mode, side, "Ext", 1);
+    makeSortButton(window, view_mode, side, "Date", 2);
+    makeSortButton(window, view_mode, side, "Size", 3);
 }
