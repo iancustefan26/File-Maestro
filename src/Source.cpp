@@ -55,10 +55,10 @@ int main() {
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
-		loadBetweenLine(window);
-		drawCommandButtons(window);
-		drawFileBackground(window, 0);
-		drawFileBackground(window, 1);
+		loadBetweenLine(window, light_dark_mode);
+		drawCommandButtons(window,light_dark_mode);
+		drawFileBackground(window, 0,light_dark_mode);
+		drawFileBackground(window, 1,light_dark_mode);
 		loadSortBar(window, light_dark_mode, 0);
 		loadSortBar(window, light_dark_mode, 1);
 		window.display();

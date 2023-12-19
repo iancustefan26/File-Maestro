@@ -9,17 +9,18 @@
 using namespace std::filesystem;
 
 
-void makeButton(sf::RenderWindow& window, std::string name, int index) {
-    sf::Color defaultColor(51, 53, 54);
+void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view_mode) {
+    sf::Color default_dark_Color(51, 53, 54);
+    sf::Color default_light_Color(160, 160, 160);
     sf::Color hoverColor(7, 148, 224, 128);
     sf::Color clickedColor(224, 20, 75);
 
     sf::RectangleShape iconBox(sf::Vector2f(213.f, 40.f));
     iconBox.setPosition(0.f + index, 680.f);
-    iconBox.setFillColor(defaultColor);
+    iconBox.setFillColor(view_mode == 0 ? default_light_Color : default_dark_Color);
 
     sf::RectangleShape line(sf::Vector2f(1.f, 40.f));
-    line.setFillColor(sf::Color::Black);
+    line.setFillColor(view_mode == 0 ? sf::Color::White : sf::Color::Black);
     line.setPosition(iconBox.getPosition().x + 213.f, 680.f);
 
     sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
@@ -47,7 +48,7 @@ void makeButton(sf::RenderWindow& window, std::string name, int index) {
     }
     else {
         //if (selected[index - 214 * num + num] == 1) iconBox.setFillColor(clickedColor);
-        iconBox.setFillColor(defaultColor);
+        iconBox.setFillColor(view_mode == 0 ? default_light_Color : default_dark_Color);
     }
 
     sf::Text buttonText;
@@ -72,7 +73,7 @@ void makeButton(sf::RenderWindow& window, std::string name, int index) {
     window.draw(line);
 }
 
-void drawCommandButtons(sf::RenderWindow& window) {
+void drawCommandButtons(sf::RenderWindow& window,bool& view_mode) {
 	std::vector<std::string> buttonNames;
 	buttonNames.push_back("F3 Open");
 	buttonNames.push_back("F4 Copy");
@@ -81,7 +82,7 @@ void drawCommandButtons(sf::RenderWindow& window) {
 	buttonNames.push_back("F7 Delete");
 	buttonNames.push_back("Alt+F4 Exit");
 	for (int i = 0; i < 6; ++i)
-		makeButton(window, buttonNames[i], 214.f * i);
+		makeButton(window, buttonNames[i], 214.f * i,view_mode);
 }
 
 void drawSortButtons(sf::RenderWindow& window) {

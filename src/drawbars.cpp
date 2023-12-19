@@ -13,9 +13,12 @@ bool loaded = false;
 bool loadedDrives = false;
 bool loadedSize = false;
 //bool openCMD = false, openNotepad = false;
-sf::Color defaultColor(51, 53, 54);
+sf::Color defaultDarkColor(51, 53, 54);
 sf::Color hoverColor(7, 148, 224, 128);
 sf::Color clickedColor(224, 20, 75);
+sf::Color defaultLightColor(255, 255, 255);
+sf::Color Gray(160, 160, 160);
+sf::Color Dark_Gray(22, 22, 23);
 
 void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector2f position) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
@@ -39,8 +42,7 @@ void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector
 void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& view_mode) {
     sf::RectangleShape iconBox(sf::Vector2f(70.f, 70.f));
     iconBox.setPosition(0.f + index, 0.f);
-    iconBox.setFillColor(defaultColor);
-
+    iconBox.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
     sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
@@ -67,7 +69,7 @@ void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& vie
         }
     }
     else {
-        iconBox.setFillColor(defaultColor);
+        iconBox.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
     }
     window.draw(iconBox);
 }
@@ -75,7 +77,7 @@ void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& vie
 void loadToolbar(sf::RenderWindow& window, bool& view_mode){
     sf::RectangleShape toolbar(sf::Vector2f(window.getSize().x, 70.f));
     toolbar.setPosition(0.f, 0.f);
-    toolbar.setFillColor(defaultColor);
+    toolbar.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
 
     window.draw(toolbar);
     for (int i = 0; i < 4; ++i)
@@ -87,14 +89,14 @@ void loadToolbar(sf::RenderWindow& window, bool& view_mode){
 
     sf::RectangleShape line(sf::Vector2f(window.getSize().x, 3.f));
 
-    line.setFillColor(sf::Color::Black);
+    line.setFillColor(view_mode == 0 ? Gray : sf::Color::Black);
     line.setPosition(0.f, 70.f);
     window.draw(line);
 }
 
-void loadBetweenLine(sf::RenderWindow& window) {
+void loadBetweenLine(sf::RenderWindow& window, bool& view_mode) {
     sf::RectangleShape lineBetween(sf::Vector2f(4.f, window.getSize().y - 70.f));
-    lineBetween.setFillColor(sf::Color::Black);
+    lineBetween.setFillColor(view_mode == 0 ? Gray : sf::Color::Black);
     lineBetween.setPosition(window.getSize().x / 2, 70.f);
     window.draw(lineBetween);
 }
@@ -102,7 +104,7 @@ void loadBetweenLine(sf::RenderWindow& window) {
 void drawIconBoxesDisk(sf::RenderWindow& window, int index, bool &view_mode, std::string &currentDisk, std::string &currentPath, static bool selected[], int num, bool side) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
     iconBox.setPosition(0.f + index, 73.f);
-    iconBox.setFillColor(defaultColor);
+    iconBox.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
 
     sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -158,19 +160,19 @@ void drawIconBoxesDisk(sf::RenderWindow& window, int index, bool &view_mode, std
     }
     else {
         if (selected[index - 60 * num + num - side * 640] == 1) iconBox.setFillColor(clickedColor);
-        else iconBox.setFillColor(defaultColor);
+        else iconBox.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
     }
     window.draw(iconBox);
 }
 
-void loadBetweenLineDrivesSpace(sf::RenderWindow &window, bool side) {
+void loadBetweenLineDrivesSpace(sf::RenderWindow &window, bool side, bool& view_mode) {
     sf::RectangleShape line(sf::Vector2f(2.f, 60.f));
-    line.setFillColor(sf::Color::Black);
+    line.setFillColor(view_mode == 0 ? Gray : sf::Color::Black);
     line.setPosition(window.getSize().x / 2 - 270.f + window.getSize().x / 2 * side, 73.f);
     window.draw(line);
 }
 
-void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window, bool side) {
+void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window, bool side,bool& view_mode) {
     sf::Text text;
     sf::Font font;
      
@@ -179,7 +181,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
         return;
     }
     text.setFont(font);
-    text.setFillColor(sf::Color::White);
+    text.setFillColor(view_mode == 0 ? Gray : sf::Color::White);
     text.setString(space);
     text.setCharacterSize(21);
     text.setPosition(window.getSize().x / 2 - 250.f + window.getSize().x / 2 * side, 90.f);
@@ -192,7 +194,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
 
 void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side, std::string &currentPath, static bool selected[]) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
-    diskBar.setFillColor(defaultColor);
+    diskBar.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
     diskBar.setPosition(0.f + window.getSize().x / 2 * side, 73.f);
     window.draw(diskBar);
     /*
@@ -205,7 +207,7 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/d_drive.png", window, sf::Vector2f(68.f, 73.f));
     */
-    loadBetweenLineDrivesSpace(window, side);
+    loadBetweenLineDrivesSpace(window, side,view_mode);
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f + window.getSize().x / 2 * side, 83.f));
     for (int i = 1; i < numberOfDrives; ++i) {
         char c = 'c' + i;
@@ -216,16 +218,16 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
         }
         renderIcon(path, window, sf::Vector2f(8.f + 60.f * i + window.getSize().x / 2 * side, 73.f));
     }
-    drawDiskSpace(currentDisk, getSizeOfDrive(currentDisk), window, side);
+    drawDiskSpace(currentDisk, getSizeOfDrive(currentDisk), window, side, view_mode);
 }
 
 void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event &event, std::string &currentPath) {
     sf::RectangleShape pathBar(sf::Vector2f(window.getSize().x / 2, 40.f));
-    pathBar.setFillColor(defaultColor);
+    pathBar.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
     pathBar.setPosition(0.f + window.getSize().x / 2 * side, 135.f);
     window.draw(pathBar);
     sf::RectangleShape line(sf::Vector2f(window.getSize().x / 2, 2.f));
-    line.setFillColor(sf::Color::Black);
+    line.setFillColor(view_mode == 0 ? Gray : sf::Color::Black);
     line.setPosition(0.f + window.getSize().x / 2 * side, 133.f);
     window.draw(line);
     line.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
@@ -256,7 +258,7 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
         std::cerr << "Couldn't load the font quicksand for diskspace";
         return;
     }
-    pathText.setFillColor(sf::Color::White);
+    pathText.setFillColor(view_mode == 0 ? Gray : sf::Color::White);
     pathText.setCharacterSize(24);
     pathText.setPosition(pathBar.getPosition().x + 7.f, pathBar.getPosition().y + 7.f);
     pathText.setFont(font);
@@ -269,10 +271,11 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
     iconBox.setPosition(0.f + index * iconBox.getSize().x + window.getSize().x / 2 * side, 176.f);
     if (side == 1 && index == 0)
         iconBox.setPosition(4.f + index + window.getSize().x / 2 * side, 176.f);
-    iconBox.setFillColor(sf::Color(22,22,23));
+    //?
+    iconBox.setFillColor(view_mode == 0 ? Gray : Dark_Gray);
 
     sf::RectangleShape line(sf::Vector2f(1.f, 23.f));
-    line.setFillColor(sf::Color::Black);
+    line.setFillColor(view_mode == 0 ? Gray : sf::Color::Black);
     line.setPosition(iconBox.getPosition().x + iconBox.getSize().x, 175.f);
 
     sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
@@ -285,7 +288,7 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
         }
     }
     else {
-        iconBox.setFillColor(sf::Color(22,22,23));
+        iconBox.setFillColor(view_mode == 0 ? Gray : Dark_Gray);
     }
 
     sf::Text buttonText;
@@ -312,7 +315,7 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
 
 void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side) {
     sf::RectangleShape sortBar(sf::Vector2f(window.getSize().x / 2, 25.f));
-    sortBar.setFillColor(sf::Color(22,22,23));
+    sortBar.setFillColor(view_mode == 0 ? Gray : Dark_Gray);
     sortBar.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
     if (side == 1)
         sortBar.setPosition(0.f + window.getSize().x / 2 + 4.f, 175.f);
