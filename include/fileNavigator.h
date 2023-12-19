@@ -4,6 +4,6 @@
 #include <filesystem>
 #include <iostream>
 
-void drawFileBackground(sf::RenderWindow& window, bool side);
+void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode);
 
 #endif // !FILENAVIGATOR_H
