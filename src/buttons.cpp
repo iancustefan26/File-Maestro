@@ -20,7 +20,7 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
     iconBox.setFillColor(view_mode == 0 ? default_light_Color : default_dark_Color);
 
     sf::RectangleShape line(sf::Vector2f(1.f, 40.f));
-    line.setFillColor(view_mode == 0 ? sf::Color::White : sf::Color::Black);
+    line.setFillColor(sf::Color::Black);
     line.setPosition(iconBox.getPosition().x + 213.f, 680.f);
 
     sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
@@ -48,7 +48,7 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
     }
     else {
         //if (selected[index - 214 * num + num] == 1) iconBox.setFillColor(clickedColor);
-        iconBox.setFillColor(view_mode == 0 ? default_light_Color : default_dark_Color);
+        iconBox.setFillColor(view_mode == 0 ? sf::Color::White : default_dark_Color);
     }
 
     sf::Text buttonText;
@@ -57,7 +57,7 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
         std::cerr << "Couldn't load the font quicksand for diskspace";
         return;
     }
-    buttonText.setFillColor(sf::Color::White);
+    buttonText.setFillColor(view_mode == 1 ? sf::Color::White : sf::Color::Black);
     buttonText.setFont(font);
     buttonText.setCharacterSize(24);
     buttonText.setString(name);

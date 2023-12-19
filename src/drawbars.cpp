@@ -181,7 +181,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
         return;
     }
     text.setFont(font);
-    text.setFillColor(view_mode == 0 ? Gray : sf::Color::White);
+    text.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
     text.setString(space);
     text.setCharacterSize(21);
     text.setPosition(window.getSize().x / 2 - 250.f + window.getSize().x / 2 * side, 90.f);
@@ -258,7 +258,7 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
         std::cerr << "Couldn't load the font quicksand for diskspace";
         return;
     }
-    pathText.setFillColor(view_mode == 0 ? Gray : sf::Color::White);
+    pathText.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
     pathText.setCharacterSize(24);
     pathText.setPosition(pathBar.getPosition().x + 7.f, pathBar.getPosition().y + 7.f);
     pathText.setFont(font);
