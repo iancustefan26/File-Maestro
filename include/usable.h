@@ -6,4 +6,5 @@
 
 bool isDoubleClick( sf::RenderWindow& window);
 
+
 #endif

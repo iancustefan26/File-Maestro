@@ -27,7 +27,7 @@ void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode) {
 	window.draw(line);
 }
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, sf::Event &event) {
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
 	fileBox.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
 	fileBox.setPosition(0.f + window.getSize().x / 2 * side, 200.f + index);
@@ -40,8 +40,10 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
         fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			if (isDoubleClick(window))
+			if (isDoubleClick(window)) {
 				std::cout << "Double click!\n";
+				currentPath = currentPath + "/" + fileName;
+			}
 			selected[i] = !selected[i];
             fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
 			/*
@@ -58,7 +60,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	window.draw(fileBox);
 	///--------switch(fileExtension)
 
-	renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/folder_icon.png", window, sf::Vector2f(10.f, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	if(ext == "") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/folder_icon.png", window, sf::Vector2f(10.f, fileBox.getPosition().y + fileBox.getSize().y / 6));
 
 	///---------
 	sf::Font font;
@@ -70,18 +72,18 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	
 	text.setFont(font);
 	text.setCharacterSize(15);
-	text.setString(fileName);
+	text.setString(fileName + ext);
 	text.setPosition(fileBox.getPosition().x + 40.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 4);
 	text.setFillColor(sf::Color::White);
 	window.draw(text);
 	
 }
 
-void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event &event) {
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]) {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
 	int i = 0;
 	for (const auto& entry : directory_iterator(currentPath)) {
-		listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), event);
+		listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), entry.path().extension().string());
 		i++;
 		if (i >= numberOfFiles)
 			break;

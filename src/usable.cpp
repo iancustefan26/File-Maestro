@@ -30,3 +30,4 @@ bool isDoubleClick(sf::RenderWindow& window) {
 
     return false;
 }
+

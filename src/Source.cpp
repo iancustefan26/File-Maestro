@@ -55,7 +55,7 @@ int main() {
 		drawFileBackground(window, 0, light_dark_mode);
 		drawFileBackground(window, 1, light_dark_mode);
 		static bool selectedFiles1[205] = { 0 };
-		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event);
+		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1);
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
