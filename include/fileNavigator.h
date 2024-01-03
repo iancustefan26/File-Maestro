@@ -6,4 +6,8 @@
 
 void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode);
 
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index);
+
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]);
+
 #endif // !FILENAVIGATOR_H

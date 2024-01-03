@@ -17,6 +17,7 @@ std::string currentPath = "C:/";
 std::string currentPath2 = "C:/";
 static bool selected1[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 static bool selected2[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
+static bool selected[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 int main() {
 	//Rendering window
@@ -59,6 +60,7 @@ int main() {
 		drawCommandButtons(window,light_dark_mode);
 		drawFileBackground(window, 0,light_dark_mode);
 		drawFileBackground(window, 1,light_dark_mode);
+		drawFilesFromDir(window, 1, light_dark_mode, currentPath, selected);
 		loadSortBar(window, light_dark_mode, 0);
 		loadSortBar(window, light_dark_mode, 1);
 		window.display();
