@@ -5,6 +5,7 @@
 #include <chrono>
 #include <thread>
 #include "filesize.h"
+#include "drawbars.h"
 
 sf::Color bgDarkColor(89, 87, 87);
 sf::Color bgLightColor(199, 199, 199);
@@ -25,10 +26,10 @@ void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode) {
 	window.draw(line);
 }
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index) {
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
 	fileBox.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
-	fileBox.setPosition(0.f, 200.f + index);
+	fileBox.setPosition(0.f + window.getSize().x / 2 * side, 200.f + index);
 
     sf::FloatRect iconBoxRect = fileBox.getGlobalBounds();
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -36,7 +37,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	int i = index / 30;
 
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
-        fileBox.setFillColor(hoverrColor);
+        fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			selected[i] = !selected[i];
             fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
@@ -45,17 +46,41 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				std::cout << selected[i] << " ";
 			std::cout << "\n";
 			*/
-			std::this_thread::sleep_for(std::chrono::milliseconds(60));
+			std::this_thread::sleep_for(std::chrono::milliseconds(30));
         }
     }
 	else {
 		fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
 	}
 	window.draw(fileBox);
+	///--------
+
+	renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/folder_icon.png", window, sf::Vector2f(10.f, fileBox.getPosition().y + fileBox.getSize().y / 6));
+
+	///---------
+	sf::Font font;
+	sf::Text text;
+	if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf")) {
+		std::cerr << "Couldn't load the font quicksand for diskspace";
+		return;
+	}
+	
+	text.setFont(font);
+	text.setCharacterSize(15);
+	text.setString(fileName);
+	text.setPosition(fileBox.getPosition().x + 40.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 4);
+	text.setFillColor(sf::Color::White);
+	window.draw(text);
+	
 }
 
 void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]) {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
-	for (int i = 0; i < numberOfFiles; ++i)
-		listFile(window, side, view_mode, currentPath, selected, i * 30.f);
+	int i = 0;
+	for (const auto& entry : directory_iterator(currentPath)) {
+		listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string());
+		i++;
+		if (i >= numberOfFiles)
+			break;
+	}
 }

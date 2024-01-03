@@ -13,4 +13,6 @@ void loadPathBar(sf::RenderWindow& window, bool &view_mode, bool side, sf::Event
 
 void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side);
 
+void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector2f position);
+
 #endif

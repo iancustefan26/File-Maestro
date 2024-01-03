@@ -154,7 +154,7 @@ void drawIconBoxesDisk(sf::RenderWindow& window, int index, bool &view_mode, std
                 std::cout << selected[i] << " ";
             std::cout << index - 60 * num + num - side * 640 << "\n";
             */
-            std::this_thread::sleep_for(std::chrono::milliseconds(60));
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
             
         }
     }
