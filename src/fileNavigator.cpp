@@ -121,9 +121,16 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	}
 	window.draw(fileBox);
 	///--------switch(fileExtension)
-
-	if(ext == "") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/folder_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
-
+	if (fileName[0] == '$') renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/dangerfile_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == "" && fileName[0] != '$') renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/folder_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".exe") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/exe_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".zip") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/zip_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".png") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/png_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".jpg") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/jpg_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".txt") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/txt_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".dll") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/dll_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/unknown_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	
 	///---------
 	sf::Font font;
 	sf::Text text;
