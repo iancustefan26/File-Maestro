@@ -14,6 +14,11 @@ sf::Color Grayish(160, 160, 160);
 sf::Color hoverrColor(7, 148, 224, 128);
 sf::Color clickeddColor(224, 20, 75);
 
+void clearSelected(static bool selected[]) {
+	for (int i = 0; i < 205; ++i)
+		selected[i] = 0;
+}
+
 void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode) {
 	sf::RectangleShape background(sf::Vector2f(window.getSize().x / 2, 478.f));
 	sf::RectangleShape line(sf::Vector2f(window.getSize().x / 2, 2.f));
@@ -44,6 +49,7 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 				std::cout << "Double click!\n";
 				size_t lastSlashPos = currentPath.find_last_of('/');
 				currentPath = currentPath.substr(0, lastSlashPos);
+				clearSelected(selected);
 			}
 			selected[i] = !selected[i];
 			fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
@@ -89,10 +95,16 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
         fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 			if (isDoubleClick(window)) {
 				std::cout << "Double click!\n";
 				currentPath = currentPath + "/" + fileName;
+				clearSelected(selected);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+				std::cout << "Enter Pressed!\n";
+				currentPath = currentPath + "/" + fileName;
+				clearSelected(selected);
 			}
 			selected[i] = !selected[i];
             fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
