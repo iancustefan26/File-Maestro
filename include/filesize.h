@@ -7,6 +7,8 @@ using namespace std::filesystem;
 
 std::uintmax_t getDirectorySize(const path& dir);
 
+int getNumberOfFilesFromDir(std::string dir);
+
 void listFilesFromDir(const path& dir);
 
 void createDirInPath(path& myPath, const std::string fileName);

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include "filesize.h"
 
 sf::Color bgDarkColor(89, 87, 87);
 sf::Color bgLightColor(199, 199, 199);
@@ -34,16 +35,18 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 
 	int i = index / 30;
 
-    if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+    if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
         fileBox.setFillColor(hoverrColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			selected[i] = !selected[i];
             fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
+			/*
 			for (int i = 0; i < 5; ++i)
 				std::cout << selected[i] << " ";
 			std::cout << "\n";
+			*/
+			std::this_thread::sleep_for(std::chrono::milliseconds(60));
         }
-		std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 	else {
 		fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
@@ -52,6 +55,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 }
 
 void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]) {
-	for (int i = 0; i < 5; ++i)
-		listFile(window, side, view_mode, currentPath, selected, i * 30);
+	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
+	for (int i = 0; i < numberOfFiles; ++i)
+		listFile(window, side, view_mode, currentPath, selected, i * 30.f);
 }

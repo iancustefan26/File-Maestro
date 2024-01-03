@@ -19,7 +19,6 @@ void listFilesFromDir(const path& dir) {
     std::cout << "Files in directory: " << std::endl;
     for (const auto& entry : directory_iterator(dir)) {
         std::cout << entry.path().filename() << "\n";
-
     }
 }
 
@@ -101,4 +100,11 @@ std::string compressSize(uintmax_t sizeToCompress) {
 std::string getSizeOfDrive(std::string path) {
     space_info size = space(path);
     return compressSize(size.free) + " free of " + compressSize(size.capacity);
+}
+
+int getNumberOfFilesFromDir(std::string dir) {
+    int number = 0;
+    for (const auto& entry : directory_iterator(dir))
+        number++;
+    return number;
 }

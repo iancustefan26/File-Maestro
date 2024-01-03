@@ -17,7 +17,7 @@ std::string currentPath = "C:/";
 std::string currentPath2 = "C:/";
 static bool selected1[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 static bool selected2[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
-static bool selected[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
 
 int main() {
 	//Rendering window
@@ -51,6 +51,10 @@ int main() {
 		///
 		///the drawing stage
 		/// 
+		drawFileBackground(window, 0, light_dark_mode);
+		drawFileBackground(window, 1, light_dark_mode);
+		static bool selectedFiles1[205] = { 0 };
+		drawFilesFromDir(window, 1, light_dark_mode, currentPath, selectedFiles1);
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
@@ -58,9 +62,6 @@ int main() {
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);
 		drawCommandButtons(window,light_dark_mode);
-		drawFileBackground(window, 0,light_dark_mode);
-		drawFileBackground(window, 1,light_dark_mode);
-		drawFilesFromDir(window, 1, light_dark_mode, currentPath, selected);
 		loadSortBar(window, light_dark_mode, 0);
 		loadSortBar(window, light_dark_mode, 1);
 		window.display();
