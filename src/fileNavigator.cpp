@@ -6,6 +6,7 @@
 #include <thread>
 #include "filesize.h"
 #include "drawbars.h"
+#include "usable.h"
 
 sf::Color bgDarkColor(89, 87, 87);
 sf::Color bgLightColor(199, 199, 199);
@@ -26,7 +27,7 @@ void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode) {
 	window.draw(line);
 }
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName) {
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, sf::Event &event) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
 	fileBox.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
 	fileBox.setPosition(0.f + window.getSize().x / 2 * side, 200.f + index);
@@ -39,6 +40,8 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
         fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (isDoubleClick(window))
+				std::cout << "Double click!\n";
 			selected[i] = !selected[i];
             fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
 			/*
@@ -53,7 +56,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 		fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
 	}
 	window.draw(fileBox);
-	///--------
+	///--------switch(fileExtension)
 
 	renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/folder_icon.png", window, sf::Vector2f(10.f, fileBox.getPosition().y + fileBox.getSize().y / 6));
 
@@ -74,11 +77,11 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	
 }
 
-void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]) {
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event &event) {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
 	int i = 0;
 	for (const auto& entry : directory_iterator(currentPath)) {
-		listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string());
+		listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), event);
 		i++;
 		if (i >= numberOfFiles)
 			break;

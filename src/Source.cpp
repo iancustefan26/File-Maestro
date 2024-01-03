@@ -6,6 +6,7 @@
 #include "drawbars.h"
 #include "sorts.h"
 #include "fileNavigator.h"
+#include "usable.h"
 #define WINDOW_W 1280
 #define WINDOW_H 720
 using namespace std::filesystem;
@@ -54,7 +55,7 @@ int main() {
 		drawFileBackground(window, 0, light_dark_mode);
 		drawFileBackground(window, 1, light_dark_mode);
 		static bool selectedFiles1[205] = { 0 };
-		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1);
+		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event);
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
