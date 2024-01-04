@@ -14,4 +14,6 @@ void renderIcon(const std::string& iconPath, sf::RenderWindow& window, sf::Vecto
 
 sf::Font& getFont(const std::string& fontPath);
 
+void renderErrorWindow(sf::RenderWindow &window);
+
 #endif

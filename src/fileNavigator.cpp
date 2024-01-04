@@ -9,6 +9,7 @@
 #include "usable.h"
 #include "textureCache.h"
 
+
 sf::Color bgDarkColor(89, 87, 87);
 sf::Color bgLightColor(199, 199, 199);
 sf::Color Grayish(160, 160, 160);
@@ -99,7 +100,11 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 			if (isDoubleClick(window)) {
 				std::cout << "Double click!\n";
-				currentPath = currentPath + "/" + fileName;
+				if(ext == "") currentPath = currentPath + "/" + fileName;
+				if (fileName[0] == '$') {
+					std::cerr << "Acces denied!" << "\n";
+					renderErrorWindow(window);
+				}
 				clearSelected(selected);
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
@@ -153,10 +158,15 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 		drawBackFatherPath(window, side, view_mode, currentPath, selected);
 	}
 	else i = 0;
-	for (const auto& entry : directory_iterator(currentPath)) {
-		listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), entry.path().extension().string());
-		i++;
-		if (i >= numberOfFiles)
-			break;
+	try {
+		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
+			listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), entry.path().extension().string());
+			i++;
+			if (i >= numberOfFiles)
+				break;
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Exception in listFile: " << e.what() << std::endl;
 	}
 }

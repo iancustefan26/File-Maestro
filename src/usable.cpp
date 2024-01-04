@@ -99,3 +99,40 @@ sf::Font& getFont(const std::string& fontPath) {
         }
     }
 }
+
+void renderErrorWindow(sf::RenderWindow &window) {
+    sf::RenderWindow errorWindow(sf::VideoMode(400, 20), "Error - Acces denied!");
+
+    errorWindow.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
+        sf::VideoMode::getDesktopMode().height / 2 - 300 / 2));
+
+    sf::Image icon;
+    if (icon.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/errorwindow_icon.png")) {
+        errorWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+        std::cout << "Loaded window icon..." << "\n";
+    }
+    else {
+        std::cerr << "Error when loading the window icon!" << "\n";
+        return;
+    }
+
+    while (errorWindow.isOpen()) {
+        sf::Event event;
+        while (errorWindow.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                errorWindow.close();
+                return;
+            }
+        }
+        renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/errorwindow_icon.png", errorWindow, sf::Vector2f(errorWindow.getSize().x / 2, errorWindow.getSize().y / 2));
+        sf::Text text;
+        sf::Font font = getFont("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf");
+
+        text.setString("Acces denied!");
+        text.setFont(font);
+        text.setCharacterSize(24);
+        text.setPosition(100, 100);
+        text.setFillColor(sf::Color::Black);
+        errorWindow.draw(text);
+    }
+}
