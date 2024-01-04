@@ -5,11 +5,12 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
+#include "usable.h"
+
 #define WINDOW_W 1280
 #define WINDOW_H 720
 using namespace std::filesystem;
 
-bool loaded = false;
 bool loadedDrives = false;
 bool loadedSize = false;
 //bool openCMD = false, openNotepad = false;
@@ -20,24 +21,6 @@ sf::Color defaultLightColor(255, 255, 255);
 sf::Color Gray(160, 160, 160);
 sf::Color Dark_Gray(22, 22, 23);
 
-void renderIcon(const std::string iconPath, sf::RenderWindow& window, sf::Vector2f position) {
-    sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
-    sf::FloatRect iconBoxRect = iconBox.getGlobalBounds();
-
-    sf::Image icon;
-    if (icon.loadFromFile(iconPath)) {
-        sf::Texture iconTexture;
-        iconTexture.loadFromImage(icon);
-        sf::Sprite iconSprite(iconTexture);
-        iconSprite.setPosition(position); ///inital 8.f, 10.f -> 70.f mai in dreapta(x)
-        window.draw(iconSprite);
-        if (!loaded) std::cout << "Loaded toolbar icons..." << "\n", loaded = true;
-    }
-    else {
-        if(!loaded) std::cerr << "Error when loading the toolbar icon!" << "\n", loaded = true;
-        return;
-    }
-}
 
 void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& view_mode) {
     sf::RectangleShape iconBox(sf::Vector2f(70.f, 70.f));

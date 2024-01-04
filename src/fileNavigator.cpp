@@ -7,6 +7,7 @@
 #include "filesize.h"
 #include "drawbars.h"
 #include "usable.h"
+#include "textureCache.h"
 
 sf::Color bgDarkColor(89, 87, 87);
 sf::Color bgLightColor(199, 199, 199);
@@ -58,7 +59,7 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 				std::cout << selected[i] << " ";
 			std::cout << "\n";
 			*/
-			std::this_thread::sleep_for(std::chrono::milliseconds(30));
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}
 	}
 	else {
@@ -113,7 +114,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				std::cout << selected[i] << " ";
 			std::cout << "\n";
 			*/
-			std::this_thread::sleep_for(std::chrono::milliseconds(30));
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     }
 	else {

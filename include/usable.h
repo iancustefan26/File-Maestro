@@ -3,8 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <Windows.h>
+#include <map>
+#include "textureCache.h"
 
 bool isDoubleClick( sf::RenderWindow& window);
+
+sf::Texture& getTexture(const std::string& filePath);
+
+void renderIcon(const std::string& iconPath, sf::RenderWindow& window, sf::Vector2f position);
 
 
 #endif

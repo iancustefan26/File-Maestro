@@ -7,6 +7,7 @@
 #include "sorts.h"
 #include "fileNavigator.h"
 #include "usable.h"
+#include "textureCache.h"
 #define WINDOW_W 1280
 #define WINDOW_H 720
 using namespace std::filesystem;
