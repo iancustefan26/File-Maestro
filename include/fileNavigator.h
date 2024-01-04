@@ -10,4 +10,6 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 
 void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]);
 
+bool canOpenFolder(std::string folderPath);
+
 #endif // !FILENAVIGATOR_H

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
 #include "filesize.h"
 #include "drawbars.h"
 #include "usable.h"
@@ -19,6 +20,37 @@ sf::Color clickeddColor(224, 20, 75);
 void clearSelected(static bool selected[]) {
 	for (int i = 0; i < 205; ++i)
 		selected[i] = 0;
+}
+
+bool canOpenFolder(std::string folderPath) {
+	try {
+		// Check if the folder exists
+		if (exists(folderPath) && is_directory(folderPath)) {
+			std::cout << "Folder exists. Checking permissions..." << std::endl;
+
+			// Iterate through the contents of the folder
+			for (const auto& entry : directory_iterator(folderPath)) {
+				// Do nothing; just iterating to check permissions
+			}
+
+			std::cout << "Folder can be opened. Permissions are sufficient." << std::endl;
+			return true;
+		}
+		else {
+			std::cerr << "Folder does not exist or is not a valid folder path." << std::endl;
+			return false;
+		}
+	}
+	catch (const filesystem_error& e) {
+		// Handle exception
+		std::cerr << "Error checking folder: " << e.what() << std::endl;
+		return false;
+	}
+	catch (...) {
+		// Handle unexpected exceptions
+		std::cerr << "Unexpected error checking folder." << std::endl;
+		return false;
+	}
 }
 
 void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode) {
@@ -100,10 +132,21 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 			if (isDoubleClick(window)) {
 				std::cout << "Double click!\n";
-				if(ext == "") currentPath = currentPath + "/" + fileName;
 				if (fileName[0] == '$') {
 					std::cerr << "Acces denied!" << "\n";
 					renderErrorWindow(window);
+				}
+				if (ext == "") {
+					if (canOpenFolder(currentPath + "/" + fileName))
+						currentPath = currentPath + "/" + fileName;
+					else {
+						std::cerr << "Acces denied!" << "\n";
+						renderErrorWindow(window);
+					}
+				}
+				else {
+					std::string filePath = currentPath + "/" + fileName;
+					std::system(filePath.c_str());
 				}
 				clearSelected(selected);
 			}
@@ -162,7 +205,7 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
 			listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), entry.path().extension().string());
 			i++;
-			if (i >= numberOfFiles)
+			if (i > numberOfFiles)
 				break;
 		}
 	}
