@@ -4,11 +4,16 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <string>
 #include <cstdlib>
+#include <sstream>
 #include "filesize.h"
 #include "drawbars.h"
 #include "usable.h"
 #include "textureCache.h"
+#include "filesize.h"
+
+#define _CRT_SECURE_NO_WARNINGS
 
 
 sf::Color bgDarkColor(89, 87, 87);
@@ -50,6 +55,44 @@ bool canOpenFolder(std::string folderPath) {
 		// Handle unexpected exceptions
 		std::cerr << "Unexpected error checking folder." << std::endl;
 		return false;
+	}
+}
+
+std::string getFileLastModifiedTime(const std::string& filePath) {
+	try {
+		// Convert the file path to std::filesystem::path
+		path file(filePath);
+
+		// Get the last modification time of the file
+		auto lastWriteTime = last_write_time(file);
+
+		// Convert the file_time_type to a system_clock::time_point
+		auto timePoint = std::chrono::time_point_cast<std::chrono::system_clock::duration>(lastWriteTime - file_time_type::clock::now() + std::chrono::system_clock::now());
+
+		// Convert the time_point to a time_t for easy printing
+		std::time_t modifiedTime = std::chrono::system_clock::to_time_t(timePoint);
+
+		// Convert time_t to string
+		std::stringstream ss;
+
+		// Use localtime_s to avoid deprecated warning
+		std::tm timeInfo;
+		if (localtime_s(&timeInfo, &modifiedTime) == 0) {
+			ss << std::put_time(&timeInfo, "%c");
+		}
+		
+		//eliminate the seconds
+		std::string newSS;
+		newSS = ss.str();
+		newSS = newSS.substr(0, newSS.size() - 3);
+
+
+		return newSS;
+	}
+	catch (const std::exception& e) {
+		// Handle exceptions (e.g., file not found)
+		std::cerr << "Error: " << e.what() << std::endl;
+		return ""; // Return an empty string on error
 	}
 }
 
@@ -189,7 +232,33 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	text.setPosition(fileBox.getPosition().x + 40.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
 	text.setFillColor(sf::Color::White);
 	window.draw(text);
-	
+
+	sf::Text extension;
+	extension.setCharacterSize(15);
+	extension.setString(ext == "" ? "<DIR>" : ext);
+	extension.setFont(font);
+	extension.setFillColor(sf::Color::White);
+	extension.setPosition(0.f + window.getSize().x / 2 * side + 233.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
+	window.draw(extension);
+
+	sf::Text date;
+	date.setCharacterSize(12);
+	date.setString(getFileLastModifiedTime(currentPath + "/" + fileName));
+	date.setFillColor(sf::Color::White);
+	date.setFont(font);
+	date.setPosition(0.f + window.getSize().x / 2 * side + 350.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
+	window.draw(date);
+
+	if (ext != ""){
+		//std::string stringSize = std::to_string(file_size(currentPath + "/" + fileName) / 1024) + " KB";
+		sf::Text size;
+		size.setCharacterSize(14);
+		size.setFont(font);
+		size.setString(compressSize(file_size(currentPath + "/" + fileName)));
+		size.setFillColor(sf::Color::White);
+		size.setPosition(0.f + window.getSize().x / 2 * side + 500.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
+		window.draw(size);
+	}
 }
 
 void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]) {

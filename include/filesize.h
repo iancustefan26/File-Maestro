@@ -17,5 +17,7 @@ int getNumberOfDrives();
 
 std::string getSizeOfDrive(std::string path);
 
+std::string compressSize(uintmax_t sizeToCompress);
+
 #endif // !FILESIZE_H
 

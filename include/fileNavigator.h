@@ -12,4 +12,6 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 
 bool canOpenFolder(std::string folderPath);
 
+std::string getFileLastModifiedTime(const std::string& filePath);
+
 #endif // !FILENAVIGATOR_H
