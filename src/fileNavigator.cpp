@@ -136,7 +136,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 					std::cerr << "Acces denied!" << "\n";
 					renderErrorWindow(window);
 				}
-				if (ext == "") {
+				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
 						currentPath = currentPath + "/" + fileName;
 					else {
@@ -146,13 +146,9 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				}
 				else {
 					std::string filePath = currentPath + "/" + fileName;
-					std::system(filePath.c_str());
+					std::string command = "start \"\" \"" + filePath + "\""; ///because of spaces in file name, the shell might not recognize
+					std::system(command.c_str());
 				}
-				clearSelected(selected);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-				std::cout << "Enter Pressed!\n";
-				currentPath = currentPath + "/" + fileName;
 				clearSelected(selected);
 			}
 			selected[i] = !selected[i];
@@ -178,6 +174,9 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	else if (ext == ".jpg") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/jpg_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
 	else if (ext == ".txt") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/txt_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
 	else if (ext == ".dll") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/dll_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".mp3") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/music_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".mp4") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/video_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
+	else if (ext == ".mov") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/video_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
 	else renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/unknown_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
 	
 	///---------
