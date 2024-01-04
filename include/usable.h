@@ -12,5 +12,6 @@ sf::Texture& getTexture(const std::string& filePath);
 
 void renderIcon(const std::string& iconPath, sf::RenderWindow& window, sf::Vector2f position);
 
+sf::Font& getFont(const std::string& fontPath);
 
 #endif

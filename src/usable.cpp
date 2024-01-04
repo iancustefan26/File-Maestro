@@ -6,6 +6,7 @@
 #include "textureCache.h"
 
 std::map<std::string, sf::Texture> textureCache;
+std::map<std::string, sf::Font> fontCache;
 bool loaded = false;
 
 bool isDoubleClick(sf::RenderWindow& window) {
@@ -74,4 +75,27 @@ void renderIcon(const std::string& iconPath, sf::RenderWindow& window, sf::Vecto
     iconSprite.setPosition(position);
 
     window.draw(iconSprite);
+}
+
+sf::Font& getFont(const std::string& fontPath) {
+    auto it = fontCache.find(fontPath);
+    if (it != fontCache.end()) {
+        // Font is in the cache, return the cached font
+        return it->second;
+    }
+    else {
+        // Font is not in the cache, load it from file
+        sf::Font font;
+        if (font.loadFromFile(fontPath)) {
+            // Successfully loaded, store in the cache
+            fontCache[fontPath] = font;
+            return fontCache[fontPath];
+        }
+        else {
+            // Handle loading failure (you may want to use a default font)
+            std::cerr << "Couldn't load the font " << fontPath << "\n";
+            // Return a default font or throw an exception
+            throw std::runtime_error("Failed to load font");
+        }
+    }
 }

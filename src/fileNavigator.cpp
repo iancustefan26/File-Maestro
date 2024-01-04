@@ -133,13 +133,9 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	else renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/unknown_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
 	
 	///---------
-	sf::Font font;
+	sf::Font& font = getFont("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf");
 	sf::Text text;
-	if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf")) {
-		std::cerr << "Couldn't load the font quicksand for diskspace";
-		return;
-	}
-	
+
 	text.setFont(font);
 	text.setCharacterSize(15);
 	text.setString(fileName);
