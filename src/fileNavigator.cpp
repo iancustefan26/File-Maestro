@@ -319,6 +319,8 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 		sf::VideoMode::getDesktopMode().height / 2 - 300 / 2));
 
 	sf::Image icon;
+	sf::Font font = getFont("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf");
+
 	if (icon.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png")) {
 		searchWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 		std::cout << "Loaded window icon..." << "\n";
@@ -327,6 +329,22 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 		std::cerr << "Error when loading the window icon!" << "\n";
 		return;
 	}
+
+	sf::Text title1;
+	title1.setFillColor(sf::Color::White);
+	title1.setCharacterSize(20);
+	title1.setFont(font);
+	title1.setPosition(160.f, 10.f);
+	std::string title1Text = "Search file by name:";
+	title1.setString(title1Text);
+
+	sf::Text title2;
+	title2.setFillColor(sf::Color::White);
+	title2.setCharacterSize(20);
+	title2.setFont(font);
+	title2.setPosition(160.f, 117.f);
+	title1Text = "or Change the path:";
+	title2.setString(title1Text);
 
 	sf::RectangleShape inputBar1(sf::Vector2f(380.f, 35.f));
 	inputBar1.setFillColor(bgDarkColor);
@@ -337,12 +355,10 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 	inputBar2.setPosition(60.f, 150.f);
 
 
-	sf::Font font = getFont("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf");
-
 	sf::Text inputText;
 	inputText.setFont(font);
-	inputText.setCharacterSize(24);
-	inputText.setFillColor(sf::Color::White);
+	inputText.setCharacterSize(18);
+	inputText.setFillColor(sf::Color::Black);
 	inputText.setPosition(65.f, 155.f);
 	std::string inputString = currentPath;
 	inputText.setString(inputString);
@@ -374,6 +390,8 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 		searchWindow.draw(inputBar2);
 		renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png", searchWindow, sf::Vector2f(searchWindow.getSize().x / 2 - 20.f, 240.f));
 		searchWindow.draw(inputText);
+		searchWindow.draw(title1);
+		searchWindow.draw(title2);
 		searchWindow.display();
 	}
 }
