@@ -346,6 +346,10 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 	title1Text = "or Change the path:";
 	title2.setString(title1Text);
 
+	sf::RectangleShape searchIcon(sf::Vector2f(50.f, 50.f));
+	searchIcon.setPosition(221.f, 230.f);
+	searchIcon.setFillColor(defaulttDarkColor);
+
 	sf::RectangleShape inputBar1(sf::Vector2f(380.f, 35.f));
 	inputBar1.setFillColor(bgDarkColor);
 	inputBar1.setPosition(60.f, 50.f);
@@ -386,6 +390,26 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 				}
 		}
 		searchWindow.clear(defaulttDarkColor);
+		searchWindow.draw(searchIcon);
+		sf::FloatRect iconBoxRect = searchIcon.getGlobalBounds();
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(searchWindow);
+
+		sf::Cursor arrowCursor;
+		sf::Cursor handCursor;
+		if (!arrowCursor.loadFromSystem(sf::Cursor::Arrow)) {
+			std::cerr << "Error loading mouse pointer\n";
+			return;
+		}
+		if (!handCursor.loadFromSystem(sf::Cursor::Hand)) {
+			std::cerr << "Error loading mouse pointer\n";
+			return;
+		}
+		if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+			searchWindow.setMouseCursor(handCursor);
+		}
+		else {
+			searchWindow.setMouseCursor(arrowCursor);
+		}
 		searchWindow.draw(inputBar1);
 		searchWindow.draw(inputBar2);
 		renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png", searchWindow, sf::Vector2f(searchWindow.getSize().x / 2 - 20.f, 240.f));
