@@ -215,26 +215,7 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
     window.draw(line);
     line.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
     window.draw(line);
-    /*
-    sf::Text inputText;
-    sf::String playerInput;
-    sf::Font font;
-    if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/quicksand.ttf")) {
-        std::cerr << "Couldn't load the font quicksand for diskspace";
-        return;
-    }
-    inputText.setFont(font);
-    inputText.setFillColor(sf::Color::White);
-    inputText.setCharacterSize(24);
-    inputText.setPosition(pathBar.getPosition().x + 7.f, pathBar.getPosition().y + 7.f);
-    if (event.type == sf::Event::TextEntered) {
-        if (event.text.unicode < 128) {
-            playerInput += event.text.unicode;
-            inputText.setString(playerInput);
-        }
-    }
-    window.draw(inputText);
-    */
+    
     sf::Text pathText;
     sf::Font font;
     if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf")) {
@@ -247,6 +228,33 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
     pathText.setFont(font);
     pathText.setString(currentPath);
     window.draw(pathText);
+
+    sf::RectangleShape searchButton(sf::Vector2f(55.f, 40.f));
+    sf::RectangleShape lineSearchButton(sf::Vector2f(2.f, 40.f));
+    lineSearchButton.setFillColor(view_mode == 0 ? Gray : sf::Color::Black);
+    lineSearchButton.setPosition(window.getSize().x / 2 * (side + 1) - 57.f, 136.f);
+
+    searchButton.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
+    searchButton.setPosition(window.getSize().x / 2 * (side + 1) - 55.f, 136.f);
+
+    sf::FloatRect iconBoxRect = searchButton.getGlobalBounds();
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+    if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+        searchButton.setFillColor(hoverColor);
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            searchButton.setFillColor(clickedColor);
+        }
+    }
+    else {
+        searchButton.setFillColor(view_mode == 0 ? sf::Color::White : defaultDarkColor);
+    }
+
+    window.draw(searchButton);
+    window.draw(lineSearchButton);
+
+    renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png", window, sf::Vector2f(searchButton.getPosition().x + 9.f, searchButton.getPosition().y + 4.f));
+    
 }
 
 void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::string name, int index) {
