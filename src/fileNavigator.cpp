@@ -17,6 +17,7 @@
 
 
 sf::Color bgDarkColor(89, 87, 87);
+sf::Color defaulttDarkColor(51, 53, 54);
 sf::Color bgLightColor(199, 199, 199);
 sf::Color Grayish(160, 160, 160);
 sf::Color hoverrColor(7, 148, 224, 128);
@@ -282,6 +283,36 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 	}
 }
 
+void readyToWrite(sf::RectangleShape& inputBar, sf::RenderWindow& window, static bool selected[], int bar, sf::Text& text, std::string &string, std::string &currentPath) {
+
+	sf::FloatRect iconBoxRect = inputBar.getGlobalBounds();
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+	if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			selected[bar] = !selected[bar];
+			if (selected[bar] == 1)
+				if (bar == 0) {
+					selected[1] = 0;
+					text.setPosition(sf::Vector2f(inputBar.getPosition().x + 5.f, inputBar.getPosition().y + 5.f));
+					string = "";
+					text.setString(string);
+				}
+				else { 
+					selected[0] = 0;
+					text.setPosition(sf::Vector2f(inputBar.getPosition().x + 5.f, inputBar.getPosition().y + 5.f));
+					string = currentPath;
+					text.setString(string);
+				}
+			inputBar.setFillColor(selected[bar] == 1 ? Grayish : bgDarkColor);
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	}
+	else {
+		inputBar.setFillColor(selected[bar] == 1 ? Grayish : bgDarkColor);
+	}
+}
+
 void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 	sf::RenderWindow searchWindow(sf::VideoMode(500.f, 300.f), "Search Window");
 	searchWindow.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
@@ -296,6 +327,28 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 		std::cerr << "Error when loading the window icon!" << "\n";
 		return;
 	}
+
+	sf::RectangleShape inputBar1(sf::Vector2f(380.f, 35.f));
+	inputBar1.setFillColor(bgDarkColor);
+	inputBar1.setPosition(60.f, 50.f);
+
+	sf::RectangleShape inputBar2(sf::Vector2f(380.f, 35.f));
+	inputBar2.setFillColor(bgDarkColor);
+	inputBar2.setPosition(60.f, 150.f);
+
+
+	sf::Font font = getFont("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf");
+
+	sf::Text inputText;
+	inputText.setFont(font);
+	inputText.setCharacterSize(24);
+	inputText.setFillColor(sf::Color::White);
+	inputText.setPosition(65.f, 155.f);
+	std::string inputString = currentPath;
+	inputText.setString(inputString);
+
+	static bool selectedBar[2] = { 0, 0 };
+
 	while (searchWindow.isOpen()) {
 		sf::Event event;
 		while (searchWindow.pollEvent(event)) {
@@ -303,8 +356,24 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 				searchWindow.close();
 				return;
 			}
+			readyToWrite(inputBar1, searchWindow, selectedBar, 0, inputText, inputString, currentPath);
+			readyToWrite(inputBar2, searchWindow, selectedBar, 1, inputText, inputString, currentPath);
+				if (event.type == sf::Event::TextEntered && (selectedBar[0] == 1 || selectedBar[1] == 1)) {
+					if (event.text.unicode < 128 && event.text.unicode != 8) {
+						inputString += static_cast<char>(event.text.unicode);
+					}
+					// Handle backspace
+					else if (event.text.unicode == 8 && !inputString.empty()) {
+						inputString.pop_back();
+					}
+					inputText.setString(inputString);
+				}
 		}
-		renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png", searchWindow, sf::Vector2f(searchWindow.getSize().x / 2, searchWindow.getSize().y / 2));
+		searchWindow.clear(defaulttDarkColor);
+		searchWindow.draw(inputBar1);
+		searchWindow.draw(inputBar2);
+		renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png", searchWindow, sf::Vector2f(searchWindow.getSize().x / 2 - 20.f, 240.f));
+		searchWindow.draw(inputText);
 		searchWindow.display();
 	}
 }

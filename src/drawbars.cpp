@@ -247,7 +247,7 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
             searchButton.setFillColor(clickedColor);
             renderSearchWindow(window, currentPath);
             //renderErrorWindow(window);
-            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            std::this_thread::sleep_for(std::chrono::milliseconds(60));
         }
     }
     else {
