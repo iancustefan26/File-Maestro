@@ -16,4 +16,8 @@ std::string getFileLastModifiedTime(const std::string& filePath);
 
 void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath);
 
+void searchForFile(std::string &currentPath, std::string inputString, sf::RenderWindow &window);
+
+void changhePath(std::string &currentPath, std::string &inputString, sf::RenderWindow &window);
+
 #endif // !FILENAVIGATOR_H

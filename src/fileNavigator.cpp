@@ -406,6 +406,12 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 		}
 		if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
 			searchWindow.setMouseCursor(handCursor);
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				if (selectedBar[0] == 1)
+					searchForFile(currentPath, inputString, searchWindow);
+				/*else
+					changhePath(currentPath, inputString, searchWindow);*/
+			}
 		}
 		else {
 			searchWindow.setMouseCursor(arrowCursor);
@@ -418,4 +424,39 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 		searchWindow.draw(title2);
 		searchWindow.display();
 	}
+}
+
+std::string toLowercase(const std::string input) {
+	std::string result = input;
+	std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) {
+		return std::tolower(c);
+		});
+	return result;
+}
+
+void searchForFile(std::string& currentPath, std::string inputString, sf::RenderWindow& window) {
+	for (const auto& entry : recursive_directory_iterator(currentPath)) {
+		std::string filename = entry.path().filename().string();
+		std::cout << filename << "\n";
+		if (filename[0] == 'f') {
+			std::cout << filename + "dsadasdaa" << "\n";
+			continue;
+		}
+		else if (canOpenFolder(entry.path().string()) && is_directory(entry.path().string())) {
+			std::cout << entry.path().string() << "\n";
+		}
+		else
+			continue;
+		//std::cout << toLowercase(entry.path().filename().string()) << "\n";
+		/*
+		if(!is_regular_file(entry.path().string()))
+			if(canOpenFolder(entry.path().string()))
+				if (toLowercase(entry.path().filename().string()) == toLowercase(inputString)) {
+					currentPath = entry.path().string();
+					window.close();
+					return;
+				}
+		*/
+	}
+	renderErrorWindow(window);
 }
