@@ -6,6 +6,7 @@
 #include <chrono>
 #include <thread>
 #include "usable.h"
+#include "fileNavigator.h"
 
 #define WINDOW_W 1280
 #define WINDOW_H 720
@@ -244,6 +245,9 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
         searchButton.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             searchButton.setFillColor(clickedColor);
+            renderSearchWindow(window, currentPath);
+            //renderErrorWindow(window);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
         }
     }
     else {

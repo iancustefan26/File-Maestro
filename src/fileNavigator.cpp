@@ -174,17 +174,24 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
         fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 			if (isDoubleClick(window)) {
+				bool opened = false;
 				std::cout << "Double click!\n";
 				if (fileName[0] == '$') {
 					std::cerr << "Acces denied!" << "\n";
-					renderErrorWindow(window);
+					if (opened != true) {
+						renderErrorWindow(window, opened);
+						opened = true;
+					}
 				}
 				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
 						currentPath = currentPath + "/" + fileName;
 					else {
 						std::cerr << "Acces denied!" << "\n";
-						renderErrorWindow(window);
+						if (opened != true) {
+							renderErrorWindow(window, opened);
+							opened = true;
+						}
 					}
 				}
 				else {
@@ -279,5 +286,32 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Exception in listFile: " << e.what() << std::endl;
+	}
+}
+
+void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
+	sf::RenderWindow searchWindow(sf::VideoMode(500.f, 300.f), "Search Window");
+	searchWindow.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
+		sf::VideoMode::getDesktopMode().height / 2 - 300 / 2));
+
+	sf::Image icon;
+	if (icon.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png")) {
+		searchWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+		std::cout << "Loaded window icon..." << "\n";
+	}
+	else {
+		std::cerr << "Error when loading the window icon!" << "\n";
+		return;
+	}
+	while (searchWindow.isOpen()) {
+		sf::Event event;
+		while (searchWindow.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				searchWindow.close();
+				return;
+			}
+		}
+		renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/search_icon.png", searchWindow, sf::Vector2f(searchWindow.getSize().x / 2, searchWindow.getSize().y / 2));
+		searchWindow.display();
 	}
 }

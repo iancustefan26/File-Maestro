@@ -14,4 +14,6 @@ bool canOpenFolder(std::string folderPath);
 
 std::string getFileLastModifiedTime(const std::string& filePath);
 
+void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath);
+
 #endif // !FILENAVIGATOR_H
