@@ -100,7 +100,7 @@ sf::Font& getFont(const std::string& fontPath) {
     }
 }
 
-void renderErrorWindow(sf::RenderWindow &window, bool &opened) {
+void renderErrorWindow(sf::RenderWindow &window) {
     sf::RenderWindow errorWindow(sf::VideoMode(400, 200), "Error - Acces denied!");
 
     errorWindow.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
@@ -121,7 +121,6 @@ void renderErrorWindow(sf::RenderWindow &window, bool &opened) {
         while (errorWindow.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 errorWindow.close();
-                opened = false;
                 return;
             }
         }

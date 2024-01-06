@@ -174,24 +174,17 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
         fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 			if (isDoubleClick(window)) {
-				bool opened = false;
 				std::cout << "Double click!\n";
 				if (fileName[0] == '$') {
 					std::cerr << "Acces denied!" << "\n";
-					if (opened != true) {
-						renderErrorWindow(window, opened);
-						opened = true;
-					}
+					renderErrorWindow(window);
 				}
 				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
 						currentPath = currentPath + "/" + fileName;
 					else {
 						std::cerr << "Acces denied!" << "\n";
-						if (opened != true) {
-							renderErrorWindow(window, opened);
-							opened = true;
-						}
+						renderErrorWindow(window);
 					}
 				}
 				else {
