@@ -14,9 +14,9 @@ bool canOpenFolder(std::string folderPath);
 
 std::string getFileLastModifiedTime(const std::string& filePath);
 
-void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath);
+void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool& view_mode);
 
-void searchForFile(std::string &currentPath, std::string inputString, sf::RenderWindow &window);
+void searchForFile(std::string &currentPath, std::string inputString, sf::RenderWindow &window,bool& view_mode);
 
 void changhePath(std::string &currentPath, std::string &inputString, sf::RenderWindow &window);
 

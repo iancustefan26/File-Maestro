@@ -2,5 +2,5 @@
 #define SCROLLBAR_H
 #include <iostream>
 #include <SFML/Graphics.hpp>
-void create_scrollbar(sf::RenderWindow& window);
+void renderScroll(sf::RenderWindow& window,sf::Event event);
 #endif

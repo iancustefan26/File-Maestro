@@ -8,6 +8,7 @@
 #include "fileNavigator.h"
 #include "usable.h"
 #include "textureCache.h"
+#include "scrollbar.h"
 #define WINDOW_W 1280
 #define WINDOW_H 720
 using namespace std::filesystem;
@@ -57,6 +58,7 @@ int main() {
 		drawFileBackground(window, 1, light_dark_mode);
 		static bool selectedFiles1[205] = { 0 };
 		static bool selectedFiles2[205] = { 0 };
+		
 		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1);
 		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2);
 		loadToolbar(window, light_dark_mode);
@@ -68,9 +70,11 @@ int main() {
 		drawCommandButtons(window,light_dark_mode);
 		loadSortBar(window, light_dark_mode, 0);
 		loadSortBar(window, light_dark_mode, 1);
+		renderScroll(window,event );
 		window.display();
 	}
 
 
 	return EXIT_SUCCESS;
 }
+

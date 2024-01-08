@@ -245,7 +245,7 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
         searchButton.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             searchButton.setFillColor(clickedColor);
-            renderSearchWindow(window, currentPath);
+            renderSearchWindow(window, currentPath,view_mode);
             //renderErrorWindow(window);
             std::this_thread::sleep_for(std::chrono::milliseconds(60));
         }
