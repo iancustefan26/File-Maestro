@@ -218,7 +218,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				}
 				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
-						currentPath = currentPath + "/" + fileName;
+						currentPath = currentPath + "/" + fileName, offsetY = 200.f;
 					else {
 						std::cerr << "Acces denied!" << "\n";
 						renderErrorWindow(window, view_mode);
@@ -331,10 +331,10 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 							scrolled = true;
 							if (currentPath.length() <= 4) {
 								if (offsetY < 200.f)
-									offsetY += 40.f;
+									offsetY += 50.f;
 							}
 							else if (offsetY < 200.f)
-								offsetY += 40.f;
+								offsetY += 50.f;
 						}
 					}
 					// Scrolling down
@@ -342,7 +342,7 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 						// Handle downward scroll
 						if (!scrolled) {
 							std::cout << "Scroll Down\n";
-							offsetY -= 40.f;
+							offsetY -= 50.f;
 							scrolled = true;
 						}
 					}
