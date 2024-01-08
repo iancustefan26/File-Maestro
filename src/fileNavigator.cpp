@@ -197,32 +197,31 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 	}
 }*/
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext) {
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
 	fileBox.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
-	fileBox.setPosition(0.f + window.getSize().x / 2 * side, 200.f + index);
+	fileBox.setPosition(0.f + window.getSize().x / 2 * side, offsetY + index);
 
-    sf::FloatRect iconBoxRect = fileBox.getGlobalBounds();
-    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+	sf::FloatRect iconBoxRect = fileBox.getGlobalBounds();
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
 	int i = index / 30;
-	file[i].name = fileName;
-	file[i].extension = ext;
-    if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
-        fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+
+	if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
+		fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 			if (isDoubleClick(window)) {
 				std::cout << "Double click!\n";
 				if (fileName[0] == '$') {
 					std::cerr << "Acces denied!" << "\n";
-					renderErrorWindow(window,view_mode);
+					renderErrorWindow(window, view_mode);
 				}
 				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
 						currentPath = currentPath + "/" + fileName;
 					else {
 						std::cerr << "Acces denied!" << "\n";
-						renderErrorWindow(window,view_mode);
+						renderErrorWindow(window, view_mode);
 					}
 				}
 				else {
@@ -233,15 +232,15 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				clearSelected(selected);
 			}
 			selected[i] = !selected[i];
-            fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
+			fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 			/*
 			for (int i = 0; i < 5; ++i)
 				std::cout << selected[i] << " ";
 			std::cout << "\n";
 			*/
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        }
-    }
+		}
+	}
 	else {
 		fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 	}
@@ -259,7 +258,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	else if (ext == ".mp4") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/video_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
 	else if (ext == ".mov") renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/video_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
 	else renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/file_navigator/unknown_icon.png", window, sf::Vector2f(10.f + window.getSize().x / 2 * side, fileBox.getPosition().y + fileBox.getSize().y / 6));
-	
+
 	///---------
 	sf::Font& font = getFont("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf");
 	sf::Text text;
@@ -287,7 +286,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	date.setPosition(0.f + window.getSize().x / 2 * side + 350.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
 	window.draw(date);
 
-	if (ext != ""){
+	if (ext != "") {
 		//std::string stringSize = std::to_string(file_size(currentPath + "/" + fileName) / 1024) + " KB";
 		sf::Text size;
 		size.setCharacterSize(14);
@@ -299,7 +298,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	}
 }
 
-void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]) {
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event& event, bool& scrolled, float& offsetY) {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
 	int i;
 	if (currentPath.size() > 3) {
@@ -309,7 +308,34 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 	else i = 0;
 	try {
 		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
-			listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), entry.path().extension().string());
+			//offsetY = 200.f;
+			if (event.type == sf::Event::MouseWheelScrolled) {
+				if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+					// Scrolling up
+					if (event.mouseWheelScroll.delta > 0) {
+						// Handle upward scroll
+						if (!scrolled) {
+							std::cout << "Scroll Up\n";
+							scrolled = true;
+							offsetY += 20.f;
+						}
+					}
+					// Scrolling down
+					else if (event.mouseWheelScroll.delta < 0) {
+						// Handle downward scroll
+						if (!scrolled) {
+							std::cout << "Scroll Down\n";
+							offsetY -= 20.f;
+							scrolled = true;
+						}
+					}
+					else scrolled = false;
+				}
+			}
+			else if (!window.pollEvent(event))
+				scrolled = false;
+
+			listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), entry.path().extension().string(), event, scrolled, offsetY);
 			i++;
 			if (i > numberOfFiles)
 				break;
