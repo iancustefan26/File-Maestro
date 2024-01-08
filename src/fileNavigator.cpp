@@ -298,6 +298,17 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	}
 }
 
+bool mouseOnFiles(sf::RenderWindow& window, float minX, float minY, float maxX, float maxY) {
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+	sf::Vector2f mouseCoords = window.mapPixelToCoords(mousePosition);
+
+	if (mouseCoords.x >= minX && mouseCoords.x <= maxX &&
+		mouseCoords.y >= minY && mouseCoords.y <= maxY) {
+		return true;
+	}
+	return false;
+}
+
 void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event& event, bool& scrolled, float& offsetY) {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
 	int i;
@@ -309,7 +320,8 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 	try {
 		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
 			//offsetY = 200.f;
-			if (event.type == sf::Event::MouseWheelScrolled) {
+			if (event.type == sf::Event::MouseWheelScrolled && mouseOnFiles(window, 0.f, 200.f, 1280.f, 675.f)) {
+				if((side == 0 && mouseOnFiles(window, 0, 200.f, 635.f, 675.f)) || (side == 1 && mouseOnFiles(window, 636.f, 200.f, 1280.f, 675.f)))
 				if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
 					// Scrolling up
 					if (event.mouseWheelScroll.delta > 0) {
@@ -317,7 +329,12 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 						if (!scrolled) {
 							std::cout << "Scroll Up\n";
 							scrolled = true;
-							offsetY += 20.f;
+							if (currentPath.length() <= 4) {
+								if (offsetY < 200.f)
+									offsetY += 40.f;
+							}
+							else if (offsetY < 200.f)
+								offsetY += 40.f;
 						}
 					}
 					// Scrolling down
@@ -325,7 +342,7 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 						// Handle downward scroll
 						if (!scrolled) {
 							std::cout << "Scroll Down\n";
-							offsetY -= 20.f;
+							offsetY -= 40.f;
 							scrolled = true;
 						}
 					}
