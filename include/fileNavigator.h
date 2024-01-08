@@ -6,9 +6,9 @@
 
 void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode);
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext);
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY);
 
-void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]);
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event& event, bool& scrolled, float& offsetY);
 
 bool canOpenFolder(std::string folderPath);
 

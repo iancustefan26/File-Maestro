@@ -20,7 +20,8 @@ std::string currentPath = "C:/";
 std::string currentPath2 = "C:/";
 static bool selected1[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 static bool selected2[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
-
+bool scrolled = false;
+float offsetY = 200.f;
 
 int main() {
 	//Rendering window
@@ -59,8 +60,8 @@ int main() {
 		static bool selectedFiles1[205] = { 0 };
 		static bool selectedFiles2[205] = { 0 };
 		
-		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1);
-		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2);
+		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event, scrolled, offsetY);
+		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2, event, scrolled, offsetY);
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
@@ -70,7 +71,6 @@ int main() {
 		drawCommandButtons(window,light_dark_mode);
 		loadSortBar(window, light_dark_mode, 0);
 		loadSortBar(window, light_dark_mode, 1);
-		renderScroll(window,event );
 		window.display();
 	}
 
