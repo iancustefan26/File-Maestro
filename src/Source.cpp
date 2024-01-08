@@ -64,8 +64,8 @@ int main() {
 		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event, scrolled, offsetY1);
 		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2, event, scrolled, offsetY2);
 		loadToolbar(window, light_dark_mode);
-		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1);
-		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1, offsetY1, offsetY2);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2, offsetY1, offsetY2);
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);

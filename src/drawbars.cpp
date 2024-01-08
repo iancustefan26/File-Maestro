@@ -85,7 +85,7 @@ void loadBetweenLine(sf::RenderWindow& window, bool& view_mode) {
     window.draw(lineBetween);
 }
 
-void drawIconBoxesDisk(sf::RenderWindow& window, int index, bool &view_mode, std::string &currentDisk, std::string &currentPath, static bool selected[], int num, bool side) {
+void drawIconBoxesDisk(sf::RenderWindow& window, int index, bool &view_mode, std::string &currentDisk, std::string &currentPath, static bool selected[], int num, bool side, float &offsetY1, float &offsetY2) {
     sf::RectangleShape iconBox(sf::Vector2f(60.f, 60.f));
     iconBox.setPosition(0.f + index, 73.f);
     iconBox.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
@@ -97,34 +97,36 @@ void drawIconBoxesDisk(sf::RenderWindow& window, int index, bool &view_mode, std
         iconBox.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
-            if (index == 0)
+            if (index == 0) {
                 currentDisk = currentPath = "C:/";
+                offsetY1 = 200.f;
+            }
             if (index == 60)
-                currentDisk = currentPath = "D:/";
+                currentDisk = currentPath = "D:/", offsetY1 = 200.f;
             if (index == 120)
-                currentDisk = currentPath = "E:/";
+                currentDisk = currentPath = "E:/", offsetY1 = 200.f;
             if (index == 180)
-                currentDisk = currentPath = "F:/";
+                currentDisk = currentPath = "F:/", offsetY1 = 200.f;
             if (index == 240)
-                currentDisk = currentPath = "G:/";
+                currentDisk = currentPath = "G:/", offsetY1 = 200.f;
             if (index == 300)
-                currentDisk = currentPath = "H:/";
+                currentDisk = currentPath = "H:/", offsetY2 = 200.f;;
             if (index == 360)
-                currentDisk = currentPath = "I:/";
+                currentDisk = currentPath = "I:/", offsetY2 = 200.f;;
             if (index == 0 + window.getSize().x / 2)
-                currentDisk = currentPath = "C:/";
+                currentDisk = currentPath = "C:/", offsetY2 = 200.f;
             if (index == 60 + window.getSize().x / 2)
-                currentDisk = currentPath = "D:/";
+                currentDisk = currentPath = "D:/", offsetY2 = 200.f;
             if (index == 120 + window.getSize().x / 2)
-                currentDisk = currentPath = "E:/";
+                currentDisk = currentPath = "E:/", offsetY2 = 200.f;
             if (index == 180 + window.getSize().x / 2)
-                currentDisk = currentPath = "F:/";
+                currentDisk = currentPath = "F:/", offsetY2 = 200.f;
             if (index == 240 + window.getSize().x / 2)
-                currentDisk = currentPath = "G:/";
+                currentDisk = currentPath = "G:/", offsetY2 = 200.f;
             if (index == 300 + window.getSize().x / 2)
-                currentDisk = currentPath = "H:/";
+                currentDisk = currentPath = "H:/", offsetY2 = 200.f;
             if (index == 360 + window.getSize().x / 2)
-                currentDisk = currentPath = "I:/";
+                currentDisk = currentPath = "I:/", offsetY2 = 200.f;
         
             selected[index - 60 * num + num - side * 640] = 1;
             if (selected[index - 60 * num + num - side * 640] == 1) {
@@ -176,7 +178,7 @@ void drawDiskSpace(std::string path, std::string space, sf::RenderWindow &window
     }
 }
 
-void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side, std::string &currentPath, static bool selected[]) {
+void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_mode, std::string &currentDisk, bool side, std::string &currentPath, static bool selected[], float &offsetY1, float &offsetY2) {
     sf::RectangleShape diskBar(sf::Vector2f(window.getSize().x / 2, 60.f));
     diskBar.setFillColor(view_mode == 0 ? defaultLightColor : defaultDarkColor);
     diskBar.setPosition(0.f + window.getSize().x / 2 * side, 73.f);
@@ -186,7 +188,7 @@ void loadDiskSelection(sf::RenderWindow& window, int numberOfDrives, bool &view_
     window.draw(diskBar);
     */
     for (int i = 0; i < numberOfDrives; ++i)
-        drawIconBoxesDisk(window, (60.f * i) + window.getSize().x / 2 * side, view_mode, currentDisk, currentPath, selected, i, side);
+        drawIconBoxesDisk(window, (60.f * i) + window.getSize().x / 2 * side, view_mode, currentDisk, currentPath, selected, i, side, offsetY1, offsetY2);
     /*
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/c_drive.png", window, sf::Vector2f(8.f, 83.f));
     renderIcon("C:/PROIECT IP ORIGINAL/My Commander/assets/icons/d_drive.png", window, sf::Vector2f(68.f, 73.f));

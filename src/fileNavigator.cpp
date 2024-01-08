@@ -218,7 +218,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				}
 				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
-						currentPath = currentPath + "/" + fileName, offsetY = 200.f;
+						currentPath = currentPath + "/" + fileName, offsetY = 200.f, clearSelected(selected);
 					else {
 						std::cerr << "Acces denied!" << "\n";
 						renderErrorWindow(window, view_mode);
