@@ -3,11 +3,7 @@
 #include <filesystem>
 #include "filesize.h"
 #include <algorithm>
-struct folder
-{
-	std::string info;
-	folder* next;
-};
+#include "fileNavigator.h"
 void createfiles(const path& dir, int& k);
 void sort_ascending(folder a[], int k);
 void sort_descending(folder a[], int k);

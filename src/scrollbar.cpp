@@ -5,7 +5,7 @@ void renderScroll(sf::RenderWindow& window,sf::Event event){
     
 
     const int numFiles = 100;
-    const float fileHeight = 20.0f;
+    const float fileHeight = 30.0f;
     const float viewableFiles = window.getSize().y / fileHeight;
 
     float scrollbarHeight = window.getSize().y;
