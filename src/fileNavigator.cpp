@@ -548,6 +548,10 @@ std::string removeLastExtComponent(const std::string& filePath) {
 	return filePath;
 }
 
+bool containsSubstring(const std::string& mainString, const std::string& substring) {
+	return mainString.find(substring) != std::string::npos;
+}
+
 void searchForFile(std::string& currentPath, std::string inputString, sf::RenderWindow& window,bool& view_mode) {
 	try {
 		for (const auto& entry : recursive_directory_iterator(currentPath)) {
@@ -558,7 +562,7 @@ void searchForFile(std::string& currentPath, std::string inputString, sf::Render
 			else if(is_directory(entry.path().string()) && !canOpenFolder(entry.path().string()))
 				continue;
 			else if (is_directory(entry.path().string())) {
-				if (toLowercase(entry.path().filename().string()) == toLowercase(inputString)) {
+				if (containsSubstring(toLowercase(entry.path().filename().string()), toLowercase(inputString))) {
 					currentPath = replaceBackslashes(entry.path().string());
 					//std::cout << toLowercase(entry.path().filename().string()) << "\n";
 					window.close();
@@ -566,7 +570,7 @@ void searchForFile(std::string& currentPath, std::string inputString, sf::Render
 					}
 				}
 			else {
-				if(toLowercase(removeLastExtComponent(filename)) == toLowercase(inputString)){
+				if(containsSubstring(toLowercase(removeLastExtComponent(filename)), toLowercase(inputString))){
 					std::string filePath = removeLastPathComponent(replaceBackslashes(entry.path().string()));
 					std::cout << filePath << "\n";
 					currentPath = filePath;
