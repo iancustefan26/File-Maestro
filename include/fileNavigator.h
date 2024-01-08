@@ -18,6 +18,6 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool
 
 void searchForFile(std::string &currentPath, std::string inputString, sf::RenderWindow &window,bool& view_mode);
 
-void changhePath(std::string &currentPath, std::string &inputString, sf::RenderWindow &window);
+void changePath(std::string &currentPath, std::string &inputString, sf::RenderWindow &window, bool &view_mode);
 
 #endif // !FILENAVIGATOR_H

@@ -446,7 +446,7 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool
 	inputText.setCharacterSize(18);
 	inputText.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	inputText.setPosition(65.f, 155.f);
-	std::string inputString = currentPath;
+	std::string inputString = currentPath + "/";
 	inputText.setString(inputString);
 
 	static bool selectedBar[2] = { 0, 0 };
@@ -491,8 +491,8 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				if (selectedBar[0] == 1)
 					searchForFile(currentPath, inputString, searchWindow,view_mode);
-				/*else
-					changhePath(currentPath, inputString, searchWindow);*/
+				else
+					changePath(currentPath, inputString, searchWindow, view_mode);
 			}
 		}
 		else {
@@ -516,29 +516,79 @@ std::string toLowercase(const std::string input) {
 	return result;
 }
 
+std::string replaceBackslashes(const std::string& inputString) {
+	std::string resultString = inputString;
+	size_t found = resultString.find("\\");
+
+	while (found != std::string::npos) {
+		resultString.replace(found, 1, "/");
+		found = resultString.find("\\", found + 1);
+	}
+
+	return resultString;
+}
+
+std::string removeLastPathComponent(const std::string& filePath) {
+	size_t lastSlash = filePath.find_last_of("/\\");
+
+	if (lastSlash != std::string::npos) {
+		return filePath.substr(0, lastSlash);
+	}
+
+	return filePath;
+}
+
+std::string removeLastExtComponent(const std::string& filePath) {
+	size_t lastDot = filePath.find_last_of(".");
+
+	if (lastDot != std::string::npos) {
+		return filePath.substr(0, lastDot);
+	}
+
+	return filePath;
+}
+
 void searchForFile(std::string& currentPath, std::string inputString, sf::RenderWindow& window,bool& view_mode) {
-	for (const auto& entry : recursive_directory_iterator(currentPath)) {
-		std::string filename = entry.path().filename().string();
-		std::cout << filename << "\n";
-		if (filename[0] == 'f') {
-			std::cout << filename + "dsadasdaa" << "\n";
-			continue;
-		}
-		else if (canOpenFolder(entry.path().string()) && is_directory(entry.path().string())) {
-			std::cout << entry.path().string() << "\n";
-		}
-		else
-			continue;
-		//std::cout << toLowercase(entry.path().filename().string()) << "\n";
-		/*
-		if(!is_regular_file(entry.path().string()))
-			if(canOpenFolder(entry.path().string()))
+	try {
+		for (const auto& entry : recursive_directory_iterator(currentPath)) {
+			std::string filename = entry.path().filename().string();
+			//std::cout << filename << "\n";
+			if (filename[0] == '$')
+				continue;
+			else if(is_directory(entry.path().string()) && !canOpenFolder(entry.path().string()))
+				continue;
+			else if (is_directory(entry.path().string())) {
 				if (toLowercase(entry.path().filename().string()) == toLowercase(inputString)) {
-					currentPath = entry.path().string();
+					currentPath = replaceBackslashes(entry.path().string());
+					//std::cout << toLowercase(entry.path().filename().string()) << "\n";
+					window.close();
+					return;
+					}
+				}
+			else {
+				if(toLowercase(removeLastExtComponent(filename)) == toLowercase(inputString)){
+					std::string filePath = removeLastPathComponent(replaceBackslashes(entry.path().string()));
+					std::cout << filePath << "\n";
+					currentPath = filePath;
 					window.close();
 					return;
 				}
-		*/
+			}
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Error: " << e.what() << "\n";
 	}
 	renderErrorWindow(window,view_mode);
+}
+
+
+void changePath(std::string& currentPath, std::string& inputString, sf::RenderWindow& window, bool &view_mode) {
+	if(is_directory(replaceBackslashes(inputString))){
+		currentPath = replaceBackslashes(inputString);
+		window.close();
+		return;
+	}
+	else
+		renderErrorWindow(window, view_mode);
 }
