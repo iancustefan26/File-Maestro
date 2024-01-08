@@ -22,6 +22,13 @@ sf::Color bgLightColor(199, 199, 199);
 sf::Color Grayish(160, 160, 160);
 sf::Color hoverrColor(7, 148, 224, 128);
 sf::Color clickeddColor(224, 20, 75);
+struct folder
+{
+	std::string name,extension;
+	folder *prev, *next;
+	std::string date;
+	int size;
+}file[1000];
 
 void clearSelected(static bool selected[]) {
 	for (int i = 0; i < 205; ++i)
@@ -161,7 +168,7 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 	window.draw(text);
 }
 
-void create_files(std::string& currentPath, folder file[])
+/*void create_files(std::string& currentPath, folder file[])
 {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
 	int i;
@@ -174,6 +181,7 @@ void create_files(std::string& currentPath, folder file[])
 		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
 			file[i].name = entry.path().filename().string();
 			file[i].extension = entry.path().extension().string();
+			file[i].next.prev = file[i];
 			i++;
 			if (i > numberOfFiles)
 				break;
@@ -182,8 +190,12 @@ void create_files(std::string& currentPath, folder file[])
 	catch (const std::exception& e) {
 		std::cerr << "Exception in listFile: " << e.what() << std::endl;
 	}
-	
-}
+	i = 0;
+	for (i = 0; i < numberOfFiles; i++)
+	{
+		create_files(file[i].name, file[i].next);
+	}
+}*/
 
 void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
@@ -194,8 +206,8 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
 	int i = index / 30;
-	//file[i].name = fileName;
-	//file[i].extension = ext;
+	file[i].name = fileName;
+	file[i].extension = ext;
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
         fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {

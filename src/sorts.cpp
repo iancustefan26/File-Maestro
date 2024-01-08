@@ -3,7 +3,7 @@
 #include "filesize.h"
 #include <algorithm>
 
-/*/void createfiles(const path& dir, int& k) {
+void createfiles(const path& dir, int& k) {
 	folder files[100];
 	for (const auto& entry : directory_iterator(dir)) {
 		files[k++].info = entry.path().filename().string();
@@ -41,4 +41,4 @@ void sort_size_ascending(folder a[], int k)
 void sort_size_descending(folder a[], int k)
 {
 	std::sort(a, a + k, sort_sdescending);
-}*/
+}

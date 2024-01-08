@@ -3,12 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <filesystem>
 #include <iostream>
-struct folder
-{
-	std::string name, extension;
-	std::string date;
-	int size;
-};
 
 void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode);
 
@@ -21,8 +15,6 @@ bool canOpenFolder(std::string folderPath);
 std::string getFileLastModifiedTime(const std::string& filePath);
 
 void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool& view_mode);
-
-void create_files(std::string& currentPath, folder file[]);
 
 void searchForFile(std::string &currentPath, std::string inputString, sf::RenderWindow &window,bool& view_mode);
 

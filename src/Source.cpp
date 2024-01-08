@@ -21,9 +21,8 @@ std::string currentPath2 = "C:/";
 static bool selected1[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 static bool selected2[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 
-folder file[1000];
+
 int main() {
-	
 	//Rendering window
 	sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), "File Maestro");
 
@@ -42,8 +41,6 @@ int main() {
 		return EXIT_FAILURE;
 	}
 	///The main window loop
-	create_files(currentPath, file);
-	for (int i = 1; i <= 100; i++) std::cout << file[i].name<<"\n";
 	bool light_dark_mode = 1;
 	while (window.isOpen()) {
 		sf::Event event;
@@ -73,12 +70,11 @@ int main() {
 		drawCommandButtons(window,light_dark_mode);
 		loadSortBar(window, light_dark_mode, 0);
 		loadSortBar(window, light_dark_mode, 1);
-		//renderScroll(window,event );
-		
+		renderScroll(window,event );
 		window.display();
 	}
 
-	
+
 	return EXIT_SUCCESS;
 }
 
