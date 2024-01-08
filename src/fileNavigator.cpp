@@ -22,6 +22,13 @@ sf::Color bgLightColor(199, 199, 199);
 sf::Color Grayish(160, 160, 160);
 sf::Color hoverrColor(7, 148, 224, 128);
 sf::Color clickeddColor(224, 20, 75);
+struct folder
+{
+	std::string name,extension;
+	folder *prev, *next;
+	std::string date;
+	int size;
+}file[1000];
 
 void clearSelected(static bool selected[]) {
 	for (int i = 0; i < 205; ++i)
@@ -140,7 +147,7 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 		}
 	}
 	else {
-		fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
+		fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 	}
 	window.draw(fileBox);
 
@@ -157,9 +164,38 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 	text.setCharacterSize(15);
 	text.setString("[...]");
 	text.setPosition(fileBox.getPosition().x + 40.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
-	text.setFillColor(sf::Color::White);
+	text.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	window.draw(text);
 }
+
+/*void create_files(std::string& currentPath, folder file[])
+{
+	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
+	int i;
+	if (currentPath.size() > 3) {
+		i = 1;
+		//drawBackFatherPath(window, side, view_mode, currentPath, selected);
+	}
+	else i = 0;
+	try {
+		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
+			file[i].name = entry.path().filename().string();
+			file[i].extension = entry.path().extension().string();
+			file[i].next.prev = file[i];
+			i++;
+			if (i > numberOfFiles)
+				break;
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Exception in listFile: " << e.what() << std::endl;
+	}
+	i = 0;
+	for (i = 0; i < numberOfFiles; i++)
+	{
+		create_files(file[i].name, file[i].next);
+	}
+}*/
 
 void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
@@ -170,7 +206,8 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
 	int i = index / 30;
-
+	file[i].name = fileName;
+	file[i].extension = ext;
     if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
         fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
@@ -178,14 +215,14 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				std::cout << "Double click!\n";
 				if (fileName[0] == '$') {
 					std::cerr << "Acces denied!" << "\n";
-					renderErrorWindow(window);
+					renderErrorWindow(window,view_mode);
 				}
 				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
 						currentPath = currentPath + "/" + fileName;
 					else {
 						std::cerr << "Acces denied!" << "\n";
-						renderErrorWindow(window);
+						renderErrorWindow(window,view_mode);
 					}
 				}
 				else {
@@ -196,7 +233,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				clearSelected(selected);
 			}
 			selected[i] = !selected[i];
-            fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
+            fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 			/*
 			for (int i = 0; i < 5; ++i)
 				std::cout << selected[i] << " ";
@@ -206,7 +243,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
         }
     }
 	else {
-		fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
+		fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 	}
 	window.draw(fileBox);
 	///--------switch(fileExtension)
@@ -231,21 +268,21 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	text.setCharacterSize(15);
 	text.setString(fileName);
 	text.setPosition(fileBox.getPosition().x + 40.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
-	text.setFillColor(sf::Color::White);
+	text.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	window.draw(text);
 
 	sf::Text extension;
 	extension.setCharacterSize(15);
 	extension.setString(ext == "" ? "<DIR>" : ext);
 	extension.setFont(font);
-	extension.setFillColor(sf::Color::White);
+	extension.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	extension.setPosition(0.f + window.getSize().x / 2 * side + 233.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
 	window.draw(extension);
 
 	sf::Text date;
 	date.setCharacterSize(12);
 	date.setString(getFileLastModifiedTime(currentPath + "/" + fileName));
-	date.setFillColor(sf::Color::White);
+	date.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	date.setFont(font);
 	date.setPosition(0.f + window.getSize().x / 2 * side + 350.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
 	window.draw(date);
@@ -256,7 +293,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 		size.setCharacterSize(14);
 		size.setFont(font);
 		size.setString(compressSize(file_size(currentPath + "/" + fileName)));
-		size.setFillColor(sf::Color::White);
+		size.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 		size.setPosition(0.f + window.getSize().x / 2 * side + 500.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
 		window.draw(size);
 	}
@@ -283,7 +320,7 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 	}
 }
 
-void readyToWrite(sf::RectangleShape& inputBar, sf::RenderWindow& window, static bool selected[], int bar, sf::Text& text, std::string &string, std::string &currentPath) {
+void readyToWrite(sf::RectangleShape& inputBar, sf::RenderWindow& window, static bool selected[], int bar, sf::Text& text, std::string &string, std::string &currentPath,bool& view_mode) {
 
 	sf::FloatRect iconBoxRect = inputBar.getGlobalBounds();
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -304,16 +341,16 @@ void readyToWrite(sf::RectangleShape& inputBar, sf::RenderWindow& window, static
 					string = currentPath;
 					text.setString(string);
 				}
-			inputBar.setFillColor(selected[bar] == 1 ? Grayish : bgDarkColor);
+			inputBar.setFillColor(selected[bar] == 1 ? view_mode == 0 ? bgLightColor : bgDarkColor : Grayish);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
 	else {
-		inputBar.setFillColor(selected[bar] == 1 ? Grayish : bgDarkColor);
+		inputBar.setFillColor(selected[bar] == 1 ? view_mode == 0 ? bgLightColor : bgDarkColor : Grayish);
 	}
 }
 
-void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
+void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool& view_mode) {
 	sf::RenderWindow searchWindow(sf::VideoMode(500.f, 300.f), "Search Window");
 	searchWindow.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
 		sf::VideoMode::getDesktopMode().height / 2 - 300 / 2));
@@ -331,7 +368,7 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 	}
 
 	sf::Text title1;
-	title1.setFillColor(sf::Color::White);
+	title1.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	title1.setCharacterSize(20);
 	title1.setFont(font);
 	title1.setPosition(160.f, 10.f);
@@ -339,7 +376,7 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 	title1.setString(title1Text);
 
 	sf::Text title2;
-	title2.setFillColor(sf::Color::White);
+	title2.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	title2.setCharacterSize(20);
 	title2.setFont(font);
 	title2.setPosition(160.f, 117.f);
@@ -348,21 +385,21 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 
 	sf::RectangleShape searchIcon(sf::Vector2f(50.f, 50.f));
 	searchIcon.setPosition(221.f, 230.f);
-	searchIcon.setFillColor(defaulttDarkColor);
+	searchIcon.setFillColor(view_mode == 0 ? sf::Color::White : defaulttDarkColor);
 
 	sf::RectangleShape inputBar1(sf::Vector2f(380.f, 35.f));
-	inputBar1.setFillColor(bgDarkColor);
+	inputBar1.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
 	inputBar1.setPosition(60.f, 50.f);
 
 	sf::RectangleShape inputBar2(sf::Vector2f(380.f, 35.f));
-	inputBar2.setFillColor(bgDarkColor);
+	inputBar2.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
 	inputBar2.setPosition(60.f, 150.f);
 
 
 	sf::Text inputText;
 	inputText.setFont(font);
 	inputText.setCharacterSize(18);
-	inputText.setFillColor(sf::Color::Black);
+	inputText.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	inputText.setPosition(65.f, 155.f);
 	std::string inputString = currentPath;
 	inputText.setString(inputString);
@@ -376,8 +413,8 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 				searchWindow.close();
 				return;
 			}
-			readyToWrite(inputBar1, searchWindow, selectedBar, 0, inputText, inputString, currentPath);
-			readyToWrite(inputBar2, searchWindow, selectedBar, 1, inputText, inputString, currentPath);
+			readyToWrite(inputBar1, searchWindow, selectedBar, 0, inputText, inputString, currentPath,view_mode);
+			readyToWrite(inputBar2, searchWindow, selectedBar, 1, inputText, inputString, currentPath,view_mode);
 				if (event.type == sf::Event::TextEntered && (selectedBar[0] == 1 || selectedBar[1] == 1)) {
 					if (event.text.unicode < 128 && event.text.unicode != 8) {
 						inputString += static_cast<char>(event.text.unicode);
@@ -389,7 +426,7 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 					inputText.setString(inputString);
 				}
 		}
-		searchWindow.clear(defaulttDarkColor);
+		searchWindow.clear(view_mode == 0 ? sf::Color::White : defaulttDarkColor);
 		searchWindow.draw(searchIcon);
 		sf::FloatRect iconBoxRect = searchIcon.getGlobalBounds();
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(searchWindow);
@@ -408,7 +445,7 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath) {
 			searchWindow.setMouseCursor(handCursor);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				if (selectedBar[0] == 1)
-					searchForFile(currentPath, inputString, searchWindow);
+					searchForFile(currentPath, inputString, searchWindow,view_mode);
 				/*else
 					changhePath(currentPath, inputString, searchWindow);*/
 			}
@@ -434,7 +471,7 @@ std::string toLowercase(const std::string input) {
 	return result;
 }
 
-void searchForFile(std::string& currentPath, std::string inputString, sf::RenderWindow& window) {
+void searchForFile(std::string& currentPath, std::string inputString, sf::RenderWindow& window,bool& view_mode) {
 	for (const auto& entry : recursive_directory_iterator(currentPath)) {
 		std::string filename = entry.path().filename().string();
 		std::cout << filename << "\n";
@@ -458,5 +495,5 @@ void searchForFile(std::string& currentPath, std::string inputString, sf::Render
 				}
 		*/
 	}
-	renderErrorWindow(window);
+	renderErrorWindow(window,view_mode);
 }
