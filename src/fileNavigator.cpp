@@ -327,7 +327,7 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 					if (event.mouseWheelScroll.delta > 0) {
 						// Handle upward scroll
 						if (!scrolled) {
-							std::cout << "Scroll Up\n";
+							//std::cout << "Scroll Up\n";
 							scrolled = true;
 							if (currentPath.length() <= 4) {
 								if (offsetY < 200.f)
@@ -341,9 +341,11 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 					else if (event.mouseWheelScroll.delta < 0) {
 						// Handle downward scroll
 						if (!scrolled) {
-							std::cout << "Scroll Down\n";
-							offsetY -= 50.f;
+							//std::cout << "Scroll Down\n";
+							//offsetY -= 50.f;
 							scrolled = true;
+							if(offsetY >  200.f - 20.f * numberOfFiles)
+								offsetY -= 50.f;
 						}
 					}
 					else scrolled = false;
