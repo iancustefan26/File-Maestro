@@ -21,7 +21,8 @@ std::string currentPath2 = "C:/";
 static bool selected1[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 static bool selected2[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 bool scrolled = false;
-float offsetY = 200.f;
+float offsetY1 = 200.f;
+float offsetY2 = 200.f;
 
 int main() {
 	//Rendering window
@@ -60,11 +61,11 @@ int main() {
 		static bool selectedFiles1[205] = { 0 };
 		static bool selectedFiles2[205] = { 0 };
 		
-		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event, scrolled, offsetY);
-		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2, event, scrolled, offsetY);
+		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event, scrolled, offsetY1);
+		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2, event, scrolled, offsetY2);
 		loadToolbar(window, light_dark_mode);
-		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1);
-		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1, offsetY1, offsetY2);
+		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2, offsetY1, offsetY2);
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);

@@ -218,7 +218,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				}
 				else if (ext == "") {
 					if (canOpenFolder(currentPath + "/" + fileName))
-						currentPath = currentPath + "/" + fileName;
+						currentPath = currentPath + "/" + fileName, offsetY = 200.f, clearSelected(selected);
 					else {
 						std::cerr << "Acces denied!" << "\n";
 						renderErrorWindow(window, view_mode);
@@ -298,6 +298,17 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	}
 }
 
+bool mouseOnFiles(sf::RenderWindow& window, float minX, float minY, float maxX, float maxY) {
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+	sf::Vector2f mouseCoords = window.mapPixelToCoords(mousePosition);
+
+	if (mouseCoords.x >= minX && mouseCoords.x <= maxX &&
+		mouseCoords.y >= minY && mouseCoords.y <= maxY) {
+		return true;
+	}
+	return false;
+}
+
 void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event& event, bool& scrolled, float& offsetY) {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
 	int i;
@@ -309,24 +320,32 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 	try {
 		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
 			//offsetY = 200.f;
-			if (event.type == sf::Event::MouseWheelScrolled) {
+			if (event.type == sf::Event::MouseWheelScrolled && mouseOnFiles(window, 0.f, 200.f, 1280.f, 675.f)) {
+				if((side == 0 && mouseOnFiles(window, 0, 200.f, 635.f, 675.f)) || (side == 1 && mouseOnFiles(window, 636.f, 200.f, 1280.f, 675.f)))
 				if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
 					// Scrolling up
 					if (event.mouseWheelScroll.delta > 0) {
 						// Handle upward scroll
 						if (!scrolled) {
-							std::cout << "Scroll Up\n";
+							//std::cout << "Scroll Up\n";
 							scrolled = true;
-							offsetY += 20.f;
+							if (currentPath.length() <= 4) {
+								if (offsetY < 200.f)
+									offsetY += 50.f;
+							}
+							else if (offsetY < 200.f)
+								offsetY += 50.f;
 						}
 					}
 					// Scrolling down
 					else if (event.mouseWheelScroll.delta < 0) {
 						// Handle downward scroll
 						if (!scrolled) {
-							std::cout << "Scroll Down\n";
-							offsetY -= 20.f;
+							//std::cout << "Scroll Down\n";
+							//offsetY -= 50.f;
 							scrolled = true;
+							if(offsetY >  200.f - 20.f * numberOfFiles)
+								offsetY -= 50.f;
 						}
 					}
 					else scrolled = false;
@@ -427,7 +446,7 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool
 	inputText.setCharacterSize(18);
 	inputText.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	inputText.setPosition(65.f, 155.f);
-	std::string inputString = currentPath;
+	std::string inputString = currentPath + "/";
 	inputText.setString(inputString);
 
 	static bool selectedBar[2] = { 0, 0 };
@@ -472,8 +491,8 @@ void renderSearchWindow(sf::RenderWindow& window, std::string& currentPath, bool
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				if (selectedBar[0] == 1)
 					searchForFile(currentPath, inputString, searchWindow,view_mode);
-				/*else
-					changhePath(currentPath, inputString, searchWindow);*/
+				else
+					changePath(currentPath, inputString, searchWindow, view_mode);
 			}
 		}
 		else {
@@ -497,29 +516,83 @@ std::string toLowercase(const std::string input) {
 	return result;
 }
 
+std::string replaceBackslashes(const std::string& inputString) {
+	std::string resultString = inputString;
+	size_t found = resultString.find("\\");
+
+	while (found != std::string::npos) {
+		resultString.replace(found, 1, "/");
+		found = resultString.find("\\", found + 1);
+	}
+
+	return resultString;
+}
+
+std::string removeLastPathComponent(const std::string& filePath) {
+	size_t lastSlash = filePath.find_last_of("/\\");
+
+	if (lastSlash != std::string::npos) {
+		return filePath.substr(0, lastSlash);
+	}
+
+	return filePath;
+}
+
+std::string removeLastExtComponent(const std::string& filePath) {
+	size_t lastDot = filePath.find_last_of(".");
+
+	if (lastDot != std::string::npos) {
+		return filePath.substr(0, lastDot);
+	}
+
+	return filePath;
+}
+
+bool containsSubstring(const std::string& mainString, const std::string& substring) {
+	return mainString.find(substring) != std::string::npos;
+}
+
 void searchForFile(std::string& currentPath, std::string inputString, sf::RenderWindow& window,bool& view_mode) {
-	for (const auto& entry : recursive_directory_iterator(currentPath)) {
-		std::string filename = entry.path().filename().string();
-		std::cout << filename << "\n";
-		if (filename[0] == 'f') {
-			std::cout << filename + "dsadasdaa" << "\n";
-			continue;
-		}
-		else if (canOpenFolder(entry.path().string()) && is_directory(entry.path().string())) {
-			std::cout << entry.path().string() << "\n";
-		}
-		else
-			continue;
-		//std::cout << toLowercase(entry.path().filename().string()) << "\n";
-		/*
-		if(!is_regular_file(entry.path().string()))
-			if(canOpenFolder(entry.path().string()))
-				if (toLowercase(entry.path().filename().string()) == toLowercase(inputString)) {
-					currentPath = entry.path().string();
+	try {
+		for (const auto& entry : recursive_directory_iterator(currentPath)) {
+			std::string filename = entry.path().filename().string();
+			//std::cout << filename << "\n";
+			if (filename[0] == '$')
+				continue;
+			else if(is_directory(entry.path().string()) && !canOpenFolder(entry.path().string()))
+				continue;
+			else if (is_directory(entry.path().string())) {
+				if (containsSubstring(toLowercase(entry.path().filename().string()), toLowercase(inputString))) {
+					currentPath = replaceBackslashes(entry.path().string());
+					//std::cout << toLowercase(entry.path().filename().string()) << "\n";
+					window.close();
+					return;
+					}
+				}
+			else {
+				if(containsSubstring(toLowercase(removeLastExtComponent(filename)), toLowercase(inputString))){
+					std::string filePath = removeLastPathComponent(replaceBackslashes(entry.path().string()));
+					std::cout << filePath << "\n";
+					currentPath = filePath;
 					window.close();
 					return;
 				}
-		*/
+			}
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Error: " << e.what() << "\n";
 	}
 	renderErrorWindow(window,view_mode);
+}
+
+
+void changePath(std::string& currentPath, std::string& inputString, sf::RenderWindow& window, bool &view_mode) {
+	if(is_directory(replaceBackslashes(inputString))){
+		currentPath = replaceBackslashes(inputString);
+		window.close();
+		return;
+	}
+	else
+		renderErrorWindow(window, view_mode);
 }
