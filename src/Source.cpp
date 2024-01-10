@@ -20,9 +20,12 @@ std::string currentPath = "C:/";
 std::string currentPath2 = "C:/";
 static bool selected1[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 static bool selected2[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
+int sort_buttons0[4] = {0}; // 0 for default 1 for ascending -1 for descending
+int sort_buttons1[4] = {0}; // 0 for default 1 for ascending -1 for descending
 bool scrolled = false;
 float offsetY1 = 200.f;
 float offsetY2 = 200.f;
+
 
 int main() {
 	//Rendering window
@@ -42,8 +45,11 @@ int main() {
 		std::cerr << "Error when loading the window icon!" << "\n";
 		return EXIT_FAILURE;
 	}
+	
 	///The main window loop
 	bool light_dark_mode = 1;
+	//create_files(currentPath, files);
+	//for (int i = 0; i <= 50; i++) std::cout << files[i].name << "\n";
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -61,8 +67,8 @@ int main() {
 		static bool selectedFiles1[205] = { 0 };
 		static bool selectedFiles2[205] = { 0 };
 		
-		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event, scrolled, offsetY1);
-		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2, event, scrolled, offsetY2);
+		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event, scrolled, offsetY1, sort_buttons0, sort_buttons1);
+		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2, event, scrolled, offsetY2, sort_buttons0, sort_buttons1);
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1, offsetY1, offsetY2);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2, offsetY1, offsetY2);
@@ -70,11 +76,12 @@ int main() {
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);
 		drawCommandButtons(window,light_dark_mode);
-		loadSortBar(window, light_dark_mode, 0);
-		loadSortBar(window, light_dark_mode, 1);
+		loadSortBar(window, light_dark_mode, 0, sort_buttons0, sort_buttons1);
+		loadSortBar(window, light_dark_mode, 1, sort_buttons0, sort_buttons1);
 		window.display();
+		
 	}
-
+	
 
 	return EXIT_SUCCESS;
 }

@@ -263,7 +263,8 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
     
 }
 
-void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::string name, int index) {
+void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::string name, int index, int sort_buttons0[], int sort_buttons1[]) 
+{
     sf::RectangleShape iconBox(sf::Vector2f(160.f, 23.f));
     iconBox.setPosition(0.f + index * iconBox.getSize().x + window.getSize().x / 2 * side, 176.f);
     if (side == 1 && index == 0)
@@ -282,6 +283,17 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
         iconBox.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
+            if (side == 0)
+            {
+                sort_buttons0[index]++;
+                if (sort_buttons0[index] == 3) sort_buttons0[index] = 0;
+            }
+            if (side == 1)
+            {
+                sort_buttons1[index]++;
+                if (sort_buttons1[index] == 3) sort_buttons1[index] = 0;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(60));
         }
     }
     else {
@@ -310,7 +322,7 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
     window.draw(line);
 }
 
-void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side) {
+void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side, int sort_buttons0[], int sort_buttons1[] ) {
     sf::RectangleShape sortBar(sf::Vector2f(window.getSize().x / 2, 25.f));
     sortBar.setFillColor(view_mode == 0 ? Gray : Dark_Gray);
     sortBar.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
@@ -318,8 +330,8 @@ void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side) {
         sortBar.setPosition(0.f + window.getSize().x / 2 + 4.f, 175.f);
 
     window.draw(sortBar);
-    makeSortButton(window, view_mode, side, "Name", 0);
-    makeSortButton(window, view_mode, side, "Ext", 1);
-    makeSortButton(window, view_mode, side, "Date", 2);
-    makeSortButton(window, view_mode, side, "Size", 3);
+    makeSortButton(window, view_mode, side, "Name", 0, sort_buttons0, sort_buttons1);
+    makeSortButton(window, view_mode, side, "Ext", 1, sort_buttons0, sort_buttons1);
+    makeSortButton(window, view_mode, side, "Date", 2, sort_buttons0, sort_buttons1);
+    makeSortButton(window, view_mode, side, "Size", 3, sort_buttons0, sort_buttons1);
 }

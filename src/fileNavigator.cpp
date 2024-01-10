@@ -12,6 +12,7 @@
 #include "usable.h"
 #include "textureCache.h"
 #include "filesize.h"
+#include "sorts.h"
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -22,13 +23,6 @@ sf::Color bgLightColor(199, 199, 199);
 sf::Color Grayish(160, 160, 160);
 sf::Color hoverrColor(7, 148, 224, 128);
 sf::Color clickeddColor(224, 20, 75);
-struct folder
-{
-	std::string name,extension;
-	folder *prev, *next;
-	std::string date;
-	int size;
-}file[1000];
 
 void clearSelected(static bool selected[]) {
 	for (int i = 0; i < 205; ++i)
@@ -134,6 +128,8 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 				std::cout << "Double click!\n";
 				size_t lastSlashPos = currentPath.find_last_of('/');
 				currentPath = currentPath.substr(0, lastSlashPos);
+				if (currentPath.size() < 3)
+					currentPath += "/";
 				clearSelected(selected);
 			}
 			selected[i] = !selected[i];
@@ -168,36 +164,40 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 	window.draw(text);
 }
 
-/*void create_files(std::string& currentPath, folder file[])
+void create_files(std::string& currentPath, folder files[],int k)
 {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
-	int i;
-	if (currentPath.size() > 3) {
-		i = 1;
-		//drawBackFatherPath(window, side, view_mode, currentPath, selected);
-	}
-	else i = 0;
+	int i=k;
+	
 	try {
 		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
-			file[i].name = entry.path().filename().string();
-			file[i].extension = entry.path().extension().string();
-			file[i].next.prev = file[i];
+			files[i].name = entry.path().filename().string();
+			files[i].extension = entry.path().extension().string();
+			files[i].size = std::filesystem::file_size(entry.path());
+			
+			try {
+				path file(currentPath);
+				auto lastWriteTime = last_write_time(file);
+				auto timePoint = std::chrono::time_point_cast<std::chrono::system_clock::duration>(lastWriteTime - file_time_type::clock::now() + std::chrono::system_clock::now());
+				std::time_t modifiedTime = std::chrono::system_clock::to_time_t(timePoint);
+				files[i].date = modifiedTime;
+			}
+			catch (const std::exception& e) {
+				std::cerr << "Error getting last modification time for " << currentPath << ": " << e.what() << std::endl;
+			}
+			files[i].path_file = replaceBackslashes(entry.path().string());
 			i++;
 			if (i > numberOfFiles)
 				break;
+			
 		}
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Exception in listFile: " << e.what() << std::endl;
 	}
-	i = 0;
-	for (i = 0; i < numberOfFiles; i++)
-	{
-		create_files(file[i].name, file[i].next);
-	}
-}*/
+}
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY) {
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY,folder files[]) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
 	fileBox.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
 	fileBox.setPosition(0.f + window.getSize().x / 2 * side, offsetY + index);
@@ -217,15 +217,19 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 					renderErrorWindow(window, view_mode);
 				}
 				else if (ext == "") {
-					if (canOpenFolder(currentPath + "/" + fileName))
-						currentPath = currentPath + "/" + fileName, offsetY = 200.f, clearSelected(selected);
+					if (canOpenFolder(files[i].path_file)) {
+
+						currentPath = files[i].path_file, offsetY = 200.f, clearSelected(selected);
+
+						
+					}
 					else {
 						std::cerr << "Acces denied!" << "\n";
 						renderErrorWindow(window, view_mode);
 					}
 				}
 				else {
-					std::string filePath = currentPath + "/" + fileName;
+					std::string filePath = files[i].path_file;
 					std::string command = "start \"\" \"" + filePath + "\""; ///because of spaces in file name, the shell might not recognize
 					std::system(command.c_str());
 				}
@@ -280,7 +284,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 
 	sf::Text date;
 	date.setCharacterSize(12);
-	date.setString(getFileLastModifiedTime(currentPath + "/" + fileName));
+	date.setString(getFileLastModifiedTime(files[i].path_file));
 	date.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 	date.setFont(font);
 	date.setPosition(0.f + window.getSize().x / 2 * side + 350.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
@@ -291,7 +295,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 		sf::Text size;
 		size.setCharacterSize(14);
 		size.setFont(font);
-		size.setString(compressSize(file_size(currentPath + "/" + fileName)));
+		size.setString(compressSize(file_size(files[i].path_file)));
 		size.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
 		size.setPosition(0.f + window.getSize().x / 2 * side + 500.f, fileBox.getPosition().y + fileBox.getSize().y / 4);
 		window.draw(size);
@@ -309,16 +313,34 @@ bool mouseOnFiles(sf::RenderWindow& window, float minX, float minY, float maxX, 
 	return false;
 }
 
-void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event& event, bool& scrolled, float& offsetY) {
+
+
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event& event, bool& scrolled, float& offsetY, int sort_buttons0[], int sort_buttons1[]) {
+	
+	folder files[1000];
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
-	int i;
+	int inde=0;
+	int index = 0;
 	if (currentPath.size() > 3) {
-		i = 1;
+		inde = 1;
+		index = 1;
+		numberOfFiles++;
 		drawBackFatherPath(window, side, view_mode, currentPath, selected);
 	}
-	else i = 0;
-	try {
-		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
+	else inde = 0, index = 0;
+	create_files(currentPath, files,index);
+	for (int i = 0; i < 4; i++)
+	{
+		if (side == 0)
+		{
+			choose_sort(sort_buttons0[i], i, files, numberOfFiles);
+		}
+		if (side == 1)
+		{
+			choose_sort(sort_buttons1[i], i, files, numberOfFiles);
+		}
+	}
+	for (int i = index; i < numberOfFiles;i++) {
 			//offsetY = 200.f;
 			if (event.type == sf::Event::MouseWheelScrolled && mouseOnFiles(window, 0.f, 200.f, 1280.f, 675.f)) {
 				if((side == 0 && mouseOnFiles(window, 0, 200.f, 635.f, 675.f)) || (side == 1 && mouseOnFiles(window, 636.f, 200.f, 1280.f, 675.f)))
@@ -354,15 +376,11 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 			else if (!window.pollEvent(event))
 				scrolled = false;
 
-			listFile(window, side, view_mode, currentPath, selected, i * 30.f, entry.path().filename().string(), entry.path().extension().string(), event, scrolled, offsetY);
-			i++;
-			if (i > numberOfFiles)
-				break;
+			listFile(window, side, view_mode, currentPath, selected, i * 30.f, files[i].name, files[i].extension, event, scrolled, offsetY,files);
+			
 		}
-	}
-	catch (const std::exception& e) {
-		std::cerr << "Exception in listFile: " << e.what() << std::endl;
-	}
+	
+
 }
 
 void readyToWrite(sf::RectangleShape& inputBar, sf::RenderWindow& window, static bool selected[], int bar, sf::Text& text, std::string &string, std::string &currentPath,bool& view_mode) {
