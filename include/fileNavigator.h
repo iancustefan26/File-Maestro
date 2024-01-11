@@ -31,4 +31,6 @@ void searchForFile(std::string &currentPath, std::string inputString, sf::Render
 
 void changePath(std::string &currentPath, std::string &inputString, sf::RenderWindow &window, bool &view_mode);
 
+std::string replaceBackslashes(const std::string& inputString);
+
 #endif // !FILENAVIGATOR_H

@@ -53,7 +53,6 @@ int main() {
 	//for (int i = 0; i <= 50; i++) std::cout << files[i].name << "\n";
 	while (window.isOpen()) {
 		sf::Event event;
-
 		sf::Vector2i clickPosition = getLastClickPosition(window);
 		
 		if (clickPosition != sf::Vector2i(-1, -1))
@@ -85,7 +84,7 @@ int main() {
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);
-		lastClickedSide == 0 ? drawCommandButtons(window, light_dark_mode, currentPath) : drawCommandButtons(window, light_dark_mode, currentPath2);
+		lastClickedSide == 0 ? drawCommandButtons(window, light_dark_mode, currentPath, selectedFiles1) : drawCommandButtons(window, light_dark_mode, currentPath2, selectedFiles2);
 		loadSortBar(window, light_dark_mode, 0, sort_buttons0, sort_buttons1);
 		loadSortBar(window, light_dark_mode, 1, sort_buttons0, sort_buttons1);
 		window.display();

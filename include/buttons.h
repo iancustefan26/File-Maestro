@@ -2,7 +2,7 @@
 #define BUTTONS_H
 #include <SFML/Graphics.hpp>
 
-void drawCommandButtons(sf::RenderWindow& window,bool& view_mode, std::string &currentPath);
+void drawCommandButtons(sf::RenderWindow& window,bool& view_mode, std::string &currentPath, static bool selected[]);
 
 void drawSortButtons(sf::RenderWindow& window);
 

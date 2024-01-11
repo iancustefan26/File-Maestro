@@ -19,5 +19,7 @@ std::string getSizeOfDrive(std::string path);
 
 std::string compressSize(uintmax_t sizeToCompress);
 
+void clearSelected(static bool selected[]);
+
 #endif // !FILESIZE_H
 
