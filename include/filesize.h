@@ -11,7 +11,7 @@ int getNumberOfFilesFromDir(std::string dir);
 
 void listFilesFromDir(const path& dir);
 
-void createDirInPath(path& myPath, const std::string fileName);
+void createDirInPath(std::string& myPath, const std::string fileName);
 
 int getNumberOfDrives();
 

@@ -5,11 +5,12 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include "filesize.h"
 
 using namespace std::filesystem;
 
 
-void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view_mode) {
+void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view_mode, std::string &currentPath) {
     sf::Color default_dark_Color(51, 53, 54);
     sf::Color default_light_Color(160, 160, 160);
     sf::Color hoverColor(7, 148, 224, 128);
@@ -30,24 +31,12 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
         iconBox.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
-            /*
-            selected[index - 214 * num + num] = !selected[index - 214 * num + num];
-            if (selected[index - 214 * num + num] == 1) {
-                std::cout << "ok" << " ";
-                for (int i = 0; i < 6; ++i)
-                    if (index - 214 * num + num != i)
-                        selected[i] = 0;
-            }
-            
-            for (int i = 0; i < 6; ++i)
-                std::cout << selected[i] << " ";
-            std::cout << index - 214 * num + num << "\n";
-            std::this_thread::sleep_for(std::chrono::milliseconds(60));
-            */
+            if(name == "F6 New Folder") createDirInPath(currentPath, "New Folder");
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
         }
     }
     else {
-        //if (selected[index - 214 * num + num] == 1) iconBox.setFillColor(clickedColor);
+        
         iconBox.setFillColor(view_mode == 0 ? sf::Color::White : default_dark_Color);
     }
 
@@ -73,7 +62,7 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
     window.draw(line);
 }
 
-void drawCommandButtons(sf::RenderWindow& window,bool& view_mode) {
+void drawCommandButtons(sf::RenderWindow& window,bool& view_mode, std::string &currentPath) {
 	std::vector<std::string> buttonNames;
 	buttonNames.push_back("F3 Open");
 	buttonNames.push_back("F4 Copy");
@@ -82,7 +71,7 @@ void drawCommandButtons(sf::RenderWindow& window,bool& view_mode) {
 	buttonNames.push_back("F7 Delete");
 	buttonNames.push_back("Alt+F4 Exit");
 	for (int i = 0; i < 6; ++i)
-		makeButton(window, buttonNames[i], 214.f * i,view_mode);
+		makeButton(window, buttonNames[i], 214.f * i,view_mode, currentPath);
 }
 
 void drawSortButtons(sf::RenderWindow& window) {

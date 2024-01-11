@@ -25,6 +25,7 @@ int sort_buttons1[4] = {0}; // 0 for default 1 for ascending -1 for descending
 bool scrolled = false;
 float offsetY1 = 200.f;
 float offsetY2 = 200.f;
+bool lastClickedSide = 0;
 
 
 int main() {
@@ -52,6 +53,15 @@ int main() {
 	//for (int i = 0; i <= 50; i++) std::cout << files[i].name << "\n";
 	while (window.isOpen()) {
 		sf::Event event;
+
+		sf::Vector2i clickPosition = getLastClickPosition(window);
+		
+		if (clickPosition != sf::Vector2i(-1, -1))
+			if (clickPosition.y >= 200 && clickPosition.y <= 680)
+				if (clickPosition.x > window.getSize().x / 2)
+					lastClickedSide = 1;
+				else lastClickedSide = 0;
+
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
@@ -75,7 +85,7 @@ int main() {
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);
-		drawCommandButtons(window,light_dark_mode);
+		lastClickedSide == 0 ? drawCommandButtons(window, light_dark_mode, currentPath) : drawCommandButtons(window, light_dark_mode, currentPath2);
 		loadSortBar(window, light_dark_mode, 0, sort_buttons0, sort_buttons1);
 		loadSortBar(window, light_dark_mode, 1, sort_buttons0, sort_buttons1);
 		window.display();

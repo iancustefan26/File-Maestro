@@ -22,16 +22,16 @@ void listFilesFromDir(const path& dir) {
     }
 }
 
-void createDirInPath(path& myPath, const std::string fileName) {
+void createDirInPath(std::string& myPath, const std::string fileName) {
         if (exists(myPath)) {
             std::cout << "Directory exists: " << myPath << std::endl;
             try {
-                path new_path = myPath / fileName;
+                path new_path = myPath + "/" + fileName;
                 create_directory(new_path);
                 std::cout << "New directory named " << fileName << " has been created in " << myPath << std::endl;
             }
             catch (filesystem_error& ex) {
-                std::cerr << "Error chrating the new file: " << ex.what() << std::endl;
+                std::cerr << "Error creating the new file: " << ex.what() << std::endl;
                 return;
             }
         }

@@ -16,4 +16,6 @@ sf::Font& getFont(const std::string& fontPath);
 
 void renderErrorWindow(sf::RenderWindow &window,bool& view_mode);
 
+sf::Vector2i getLastClickPosition(sf::RenderWindow& window);
+
 #endif
