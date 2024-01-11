@@ -7,6 +7,7 @@
 #include <thread>
 #include "filesize.h"
 #include "fileNavigator.h"
+#include "usable.h"
 using namespace std::filesystem;
 
 void deleteFiles(static bool selected[], std::string currentPath) {
@@ -36,6 +37,40 @@ void deleteFiles(static bool selected[], std::string currentPath) {
     clearSelected(selected);
 }
 
+void open(std::string &currentPath, static bool selected[], sf::RenderWindow & window, bool &view_mode) {
+    int ct = 0;
+    for (int i = 0; i < 204; ++i)
+        if (selected[i] == 1)
+            ct++;
+    if (ct != 1)
+        return;
+    ct = 0;
+    for (const auto& entry : directory_iterator(currentPath)) {
+        if(selected[ct+1])
+            if (is_regular_file(entry.path().string())) {
+                std::string filePath = replaceBackslashes(entry.path().string());
+                std::string command = "start \"\" \"" + filePath + "\""; ///because of spaces in file name, the shell might not recognize
+                std::system(command.c_str());
+                return;
+            }
+            else {
+                std::string fileName = entry.path().filename().string();
+                std::cout << fileName << "\n";
+                if (fileName[0] == '$') {
+                    renderErrorWindow(window, view_mode);
+                    return;
+                }
+                else {
+                    std::cout << "Da";
+                    currentPath += "/" + fileName;
+                    return;
+                }
+            }
+            
+        ct++;
+    }
+}
+
 
 void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view_mode, std::string &currentPath, static bool selected[]) {
     sf::Color default_dark_Color(51, 53, 54);
@@ -62,7 +97,8 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
             if(name == "F6 New Folder") createDirInPath(currentPath, "New Folder");
             if (name == "F7 Delete")
                 deleteFiles(selected, currentPath);
-
+            if (name == "F3 Open")
+                open(currentPath, selected, window, view_mode);
             std::this_thread::sleep_for(std::chrono::milliseconds(30));
         }
     }

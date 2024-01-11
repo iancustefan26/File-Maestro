@@ -33,4 +33,6 @@ void changePath(std::string &currentPath, std::string &inputString, sf::RenderWi
 
 std::string replaceBackslashes(const std::string& inputString);
 
+std::string removeLastExtComponent(const std::string& filePath);
+
 #endif // !FILENAVIGATOR_H
