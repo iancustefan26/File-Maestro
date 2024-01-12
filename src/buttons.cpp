@@ -99,6 +99,8 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
                 deleteFiles(selected, currentPath);
             if (name == "F3 Open")
                 open(currentPath, selected, window, view_mode);
+            if (name == "Alt+F4 Exit")
+                window.close();
             std::this_thread::sleep_for(std::chrono::milliseconds(30));
         }
     }

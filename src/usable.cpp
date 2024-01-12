@@ -140,16 +140,10 @@ void renderErrorWindow(sf::RenderWindow &window,bool& view_mode) {
 }
 
 sf::Vector2i getLastClickPosition(sf::RenderWindow& window) {
-    sf::Event event;
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
-    while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            window.close();
-        }
-        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-            return sf::Mouse::getPosition(window);
-        }
-    }
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        return sf::Vector2i(mousePosition.x, mousePosition.y);
 
-    return sf::Vector2i(-1, -1); // Return an invalid position if no click event occurred
+    return sf::Vector2i(-1, -1);
 }
