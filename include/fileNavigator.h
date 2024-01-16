@@ -12,12 +12,12 @@ struct folder
 	bool selected;
 
 };
-void clearSelected(folder files[]);
+void clearSelected(folder files[],static bool Selected[]);
 void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode);
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY, folder files[]);
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY, folder files[],int ind,static bool Selected[]);
 
-void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, sf::Event& event, bool& scrolled, float& offsetY, int sort_buttons0[], int sort_buttons1[], folder files1[], folder files2[]);
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, sf::Event& event, bool& scrolled, float& offsetY, int sort_buttons0[], int sort_buttons1[], folder files1[], folder files2[],static bool Selected[]);
 
 bool canOpenFolder(std::string folderPath);
 

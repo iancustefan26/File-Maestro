@@ -16,11 +16,11 @@ sf::Color bbgLightColor(199, 199, 199);
 sf::Color bGrayish(160, 160, 160);
 sf::Color bhoverrColor(7, 148, 224, 128);
 sf::Color bclickeddColor(224, 20, 75);
-void deleteFiles(folder files[], std::string currentPath) {
+void deleteFiles(folder files[], std::string currentPath,static bool Selected[]) {
     int i = 0;
     std::cout << "\n";
     for (const auto& entry : directory_iterator(currentPath)) {
-        if (files[i].selected) {
+        if (Selected[i]) {
             std::string filePath = replaceBackslashes(entry.path().string());
             try {
                 // Check if the file exists before attempting to delete
@@ -40,18 +40,18 @@ void deleteFiles(folder files[], std::string currentPath) {
         }
         i++;
     }
-    clearSelected(files);
+    clearSelected(files,Selected);
 }
-void open(std::string &currentPath, folder files[], sf::RenderWindow& window, bool& view_mode) {
+void open(std::string &currentPath, folder files[], sf::RenderWindow& window, bool& view_mode,static bool Selected[]) {
     int ct = 0;
     for (int i = 0; i < 204; ++i)
-        if (files[i].selected == 1)
+        if (Selected[i])
             ct++;
     if (ct != 1)
         return;
     ct = 0;
     for (const auto& entry : directory_iterator(currentPath)) {
-        if(files[ct].selected)
+        if(Selected[ct])
             if (is_regular_file(entry.path().string())) {
                 std::string filePath = replaceBackslashes(entry.path().string());
                 std::string command = "start \"\" \"" + filePath + "\""; ///because of spaces in file name, the shell might not recognize
@@ -75,7 +75,7 @@ void open(std::string &currentPath, folder files[], sf::RenderWindow& window, bo
         ct++;
     }
 }
-void copyFilesOn(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode)
+void copyFilesOn(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode,static bool Selected[])
 {
     int i = 0;
     if (!exists(destination)) {
@@ -85,7 +85,7 @@ void copyFilesOn(folder files[], std::string destination, std::string currentPat
     for (const auto& entry : directory_iterator(currentPath)) {
         const path& sourcePath = entry.path();
         const path destPath = destination / sourcePath.filename();
-        if (files[i].selected)
+        if (Selected[i])
         {
             try {
                 copy_file(sourcePath, destPath, copy_options::overwrite_existing);
@@ -134,7 +134,7 @@ void copyFilesOn(folder files[], std::string destination, std::string currentPat
             win.display();
         }
 }
-void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& view_mode, folder files[]) {
+void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& view_mode, folder files[],static bool Selected[]) {
     sf::RenderWindow F4_Window(sf::VideoMode(500.f, 150.f), "CopyFile");
     F4_Window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
         sf::VideoMode::getDesktopMode().height / 2 - 300 / 2));
@@ -230,7 +230,7 @@ void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& vie
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 if (selectedBar == 1)
                 {
-                    copyFilesOn(files, inputText.getString(), currentPath,F4_Window,view_mode);
+                    copyFilesOn(files, inputText.getString(), currentPath,F4_Window,view_mode,Selected);
                 }
             }
         }
@@ -244,7 +244,7 @@ void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& vie
         F4_Window.display();
     }
 }
-void MoveFilesTo(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode)
+void MoveFilesTo(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode,static bool Selected[])
 {
     int i = 0;
     if (!exists(destination)) {
@@ -254,7 +254,7 @@ void MoveFilesTo(folder files[], std::string destination, std::string currentPat
     for (const auto& entry : directory_iterator(currentPath)) {
         const path& sourcePath = entry.path();
         const path destPath = destination / sourcePath.filename();
-        if (files[i].selected)
+        if (Selected[i])
         {
             try {
                 rename(sourcePath, destPath);
@@ -303,7 +303,7 @@ void MoveFilesTo(folder files[], std::string destination, std::string currentPat
         win.display();
     }
 }
-void renderF5_MOVE(sf::RenderWindow& window, std::string& currentPath, bool& view_mode,folder files[]) {
+void renderF5_MOVE(sf::RenderWindow& window, std::string& currentPath, bool& view_mode,folder files[],static bool Selected[]) {
     sf::RenderWindow F5_Window(sf::VideoMode(500.f, 150.f), "MoveFile");
     F5_Window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
         sf::VideoMode::getDesktopMode().height / 2 - 300 / 2));
@@ -399,7 +399,7 @@ void renderF5_MOVE(sf::RenderWindow& window, std::string& currentPath, bool& vie
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 if (selectedBar == 1)
                 {
-                    MoveFilesTo(files, inputText.getString(), currentPath, F5_Window, view_mode);
+                    MoveFilesTo(files, inputText.getString(), currentPath, F5_Window, view_mode,Selected);
                 }
             }
         }
@@ -557,7 +557,7 @@ void renderF6_NEW(sf::RenderWindow& window, std::string& currentPath, bool& view
         F6_Window.display();
     }
 }
-void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view_mode, std::string &currentPath, folder files[],sf::Event event) {
+void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view_mode, std::string &currentPath, folder files[],sf::Event event,static bool Selected[]) {
     sf::Color default_dark_Color(51, 53, 54);
     sf::Color default_light_Color(160, 160, 160);
     sf::Color hoverColor(7, 148, 224, 128);
@@ -584,18 +584,18 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
                 renderF6_NEW(window, currentPath, view_mode);
             }
             if (name == "F7 Delete")
-                deleteFiles(files, currentPath);
+                deleteFiles(files, currentPath,Selected);
             if (name == "F3 Open")
-                open(currentPath, files, window, view_mode);
+                open(currentPath, files, window, view_mode,Selected);
             if (name == "Alt+F4 Exit")
                 window.close();
             if (name == "F4 Copy")
             {
-                renderF4_COPY(window, currentPath, view_mode,files);
+                renderF4_COPY(window, currentPath, view_mode,files,Selected);
             }
             if (name == "F5 Move")
             {
-                renderF5_MOVE(window, currentPath, view_mode, files);
+                renderF5_MOVE(window, currentPath, view_mode, files,Selected);
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(30));
         }                   
@@ -604,8 +604,36 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
         
         iconBox.setFillColor(view_mode == 0 ? sf::Color::White : default_dark_Color);
     }
-    
-    
+    /*if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F4 && event.key.alt) {
+            window.close();
+        }
+    }
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F5 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            renderF5_MOVE(window, currentPath, view_mode, files, Selected);
+        }
+    }
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F3 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            open(currentPath, files, window, view_mode, Selected);
+        }
+    }
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F6 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            renderF6_NEW(window, currentPath, view_mode);
+        }
+    }
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F7 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            deleteFiles(files, currentPath, Selected);
+        }
+    }
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F4 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            renderF4_COPY(window, currentPath, view_mode, files, Selected);
+        }
+    }*/
     sf::Text buttonText;
     sf::Font font;
     if (!font.loadFromFile("C:/PROIECT IP ORIGINAL/My Commander/assets/fonts/aovel_sans.ttf")) {
@@ -628,7 +656,7 @@ void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view
     window.draw(line);
 }
 
-void drawCommandButtons(sf::RenderWindow& window,bool& view_mode, std::string &currentPath, folder files[],sf::Event event) {
+void drawCommandButtons(sf::RenderWindow& window,bool& view_mode, std::string &currentPath, folder files[],sf::Event event,static bool Selected[]) {
 	std::vector<std::string> buttonNames;
 	buttonNames.push_back("F3 Open");
 	buttonNames.push_back("F4 Copy");
@@ -637,5 +665,5 @@ void drawCommandButtons(sf::RenderWindow& window,bool& view_mode, std::string &c
 	buttonNames.push_back("F7 Delete");
 	buttonNames.push_back("Alt+F4 Exit");
 	for (int i = 0; i < 6; ++i)
-		makeButton(window, buttonNames[i], 214.f * i,view_mode, currentPath, files,event);
+		makeButton(window, buttonNames[i], 214.f * i,view_mode, currentPath, files,event,Selected);
 }
