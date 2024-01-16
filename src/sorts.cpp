@@ -12,13 +12,13 @@ bool sort_az(folder a, folder b)
 {
 	return a.name < b.name;
 }
-void sort_ascending(folder a[], int k)
+void sort_ascending(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_az);
+	std::sort(a+start, a + k+start, sort_az);
 }
-void sort_descending(folder a[], int k)
+void sort_descending(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_za);
+	std::sort(a+start, a + k+start, sort_za);
 }
 bool sort_sascending(folder a, folder b)
 {
@@ -36,21 +36,21 @@ bool sort_date_descending(folder a, folder b)
 {
 	return last_write_time(a.path_file) > last_write_time(b.path_file);
 }
-void sort_size_ascending(folder a[], int k)
+void sort_size_ascending(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_sascending);
+	std::sort(a+start, a + k+start, sort_sascending);
 }
-void sort_size_descending(folder a[], int k)
+void sort_size_descending(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_sdescending);
+	std::sort(a+start, a + k+start, sort_sdescending);
 }
-void sort_date_asc(folder a[], int k)
+void sort_date_asc(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_date_ascending);
+	std::sort(a+start, a + k+start, sort_date_ascending);
 }
-void sort_date_des(folder a[], int k)
+void sort_date_des(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_date_descending);
+	std::sort(a+start, a + k+start, sort_date_descending);
 }
 bool sort_extension_asc(folder a, folder b)
 {
@@ -60,34 +60,34 @@ bool sort_extension_des(folder a, folder b)
 {
 	return a.extension > b.extension;
 }
-void sort_ext_asc(folder a[], int k)
+void sort_ext_asc(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_extension_asc);
+	std::sort(a+start, a + k+start, sort_extension_asc);
 }
-void sort_ext_des(folder a[], int k)
+void sort_ext_des(folder a[], int k,int start)
 {
-	std::sort(a, a + k, sort_extension_des);
+	std::sort(a+start, a + k+start, sort_extension_des);
 }
-void choose_sort(int type, int index,folder a[],int numFiles)
+void choose_sort(int type, int index,folder a[],int numFiles,int start)
 {
 	if (index == 0) {
 		if (type == 0) return;
-		if (type == 1) sort_ascending(a, numFiles);
-		if (type == 2) sort_descending(a, numFiles);
+		if (type == 1) sort_ascending(a, numFiles,start);
+		if (type == 2) sort_descending(a, numFiles, start);
 	}
 	if (index == 1) {
 		if (type == 0) return;
-		if (type == 1) sort_ext_asc(a, numFiles);
-		if (type == 2) sort_ext_des(a, numFiles);
+		if (type == 1) sort_ext_asc(a, numFiles, start);
+		if (type == 2) sort_ext_des(a, numFiles, start);
 	}
 	if (index == 2) {
 		if (type == 0) return;
-		if (type == 1) sort_date_asc(a, numFiles);
-		if (type == 2) sort_date_des(a, numFiles);
+		if (type == 1) sort_date_asc(a, numFiles, start);
+		if (type == 2) sort_date_des(a, numFiles, start);
 	}
 	if (index == 3) {
 		if (type == 0) return;
-		if (type == 1) sort_size_ascending(a, numFiles);
-		if (type == 2) sort_size_descending(a, numFiles);
+		if (type == 1) sort_size_ascending(a, numFiles, start);
+		if (type == 2) sort_size_descending(a, numFiles, start);
 	}
 }

@@ -15,13 +15,13 @@ using namespace std::filesystem;
 bool loadedDrives = false;
 bool loadedSize = false;
 //bool openCMD = false, openNotepad = false;
+
 sf::Color defaultDarkColor(51, 53, 54);
 sf::Color hoverColor(7, 148, 224, 128);
 sf::Color clickedColor(224, 20, 75);
 sf::Color defaultLightColor(255, 255, 255);
 sf::Color Gray(160, 160, 160);
 sf::Color Dark_Gray(22, 22, 23);
-
 
 void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& view_mode) {
     sf::RectangleShape iconBox(sf::Vector2f(70.f, 70.f));
@@ -263,7 +263,7 @@ void loadPathBar(sf::RenderWindow& window, bool& view_mode, bool side, sf::Event
     
 }
 
-void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::string name, int index, int sort_buttons0[], int sort_buttons1[]) 
+void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::string name, int index, int sort_buttons0[], int sort_buttons1[], folder files[])
 {
     sf::RectangleShape iconBox(sf::Vector2f(160.f, 23.f));
     iconBox.setPosition(0.f + index * iconBox.getSize().x + window.getSize().x / 2 * side, 176.f);
@@ -285,15 +285,17 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
             iconBox.setFillColor(clickedColor);
             if (side == 0)
             {
+                clearSelected(files);
                 sort_buttons0[index]++;
                 if (sort_buttons0[index] == 3) sort_buttons0[index] = 0;
             }
             if (side == 1)
             {
+                clearSelected(files);
                 sort_buttons1[index]++;
                 if (sort_buttons1[index] == 3) sort_buttons1[index] = 0;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(60));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
     else {
@@ -306,7 +308,18 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
         std::cerr << "Couldn't load the font quicksand for diskspace";
         return;
     }
-    buttonText.setFillColor(sf::Color::White);
+    
+    if (side == 1) {
+        if (sort_buttons1[index] == 0)  buttonText.setFillColor(sf::Color::White);
+        else if (sort_buttons1[index] == 1)  buttonText.setFillColor(sf::Color::Blue);
+        else if (sort_buttons1[index] == 2)  buttonText.setFillColor(sf::Color::Red);
+    }
+    else
+    {
+        if (sort_buttons0[index] == 0)  buttonText.setFillColor(sf::Color::White);
+        else if (sort_buttons0[index] == 1)  buttonText.setFillColor(sf::Color::Blue);
+        else if (sort_buttons0[index] == 2)  buttonText.setFillColor(sf::Color::Red);
+    }
     buttonText.setFont(font);
     buttonText.setCharacterSize(18);
     buttonText.setString(name);
@@ -322,7 +335,7 @@ void makeSortButton(sf::RenderWindow& window, bool& view_mode, bool side, std::s
     window.draw(line);
 }
 
-void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side, int sort_buttons0[], int sort_buttons1[] ) {
+void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side, int sort_buttons0[], int sort_buttons1[], folder files[]) {
     sf::RectangleShape sortBar(sf::Vector2f(window.getSize().x / 2, 25.f));
     sortBar.setFillColor(view_mode == 0 ? Gray : Dark_Gray);
     sortBar.setPosition(0.f + window.getSize().x / 2 * side, 175.f);
@@ -330,8 +343,8 @@ void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side, int sort_
         sortBar.setPosition(0.f + window.getSize().x / 2 + 4.f, 175.f);
 
     window.draw(sortBar);
-    makeSortButton(window, view_mode, side, "Name", 0, sort_buttons0, sort_buttons1);
-    makeSortButton(window, view_mode, side, "Ext", 1, sort_buttons0, sort_buttons1);
-    makeSortButton(window, view_mode, side, "Date", 2, sort_buttons0, sort_buttons1);
-    makeSortButton(window, view_mode, side, "Size", 3, sort_buttons0, sort_buttons1);
+    makeSortButton(window, view_mode, side, "Name", 0, sort_buttons0, sort_buttons1, files);
+    makeSortButton(window, view_mode, side, "Ext", 1, sort_buttons0, sort_buttons1, files);
+    makeSortButton(window, view_mode, side, "Date", 2, sort_buttons0, sort_buttons1, files);
+    makeSortButton(window, view_mode, side, "Size", 3, sort_buttons0, sort_buttons1, files);
 }

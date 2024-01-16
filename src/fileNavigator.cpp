@@ -13,6 +13,7 @@
 #include "textureCache.h"
 #include "filesize.h"
 #include "sorts.h"
+#include "buttons.h"
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -24,9 +25,9 @@ sf::Color Grayish(160, 160, 160);
 sf::Color hoverrColor(7, 148, 224, 128);
 sf::Color clickeddColor(224, 20, 75);
 
-void clearSelected(static bool selected[]) {
+void clearSelected(folder files[]) {
 	for (int i = 0; i < 205; ++i)
-		selected[i] = 0;
+		files[i].selected = 0;
 }
 
 bool canOpenFolder(std::string folderPath) {
@@ -111,18 +112,18 @@ void drawFileBackground(sf::RenderWindow& window, bool side,bool& view_mode) {
 	window.draw(line);
 }
 
-void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[]) {
+void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, folder files[]) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
 	fileBox.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
 	fileBox.setPosition(0.f + window.getSize().x / 2 * side, 200.f);
-
+	static bool select = 0;
 	sf::FloatRect iconBoxRect = fileBox.getGlobalBounds();
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
 	int i = 0;
 
 	if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
-		fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
+		fileBox.setFillColor(files[i].selected == 0 ? hoverrColor : clickeddColor);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			if (isDoubleClick(window)) {
 				std::cout << "Double click!\n";
@@ -130,10 +131,10 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 				currentPath = currentPath.substr(0, lastSlashPos);
 				if (currentPath.size() < 3)
 					currentPath += "/";
-				clearSelected(selected);
+				clearSelected(files);
 			}
-			selected[i] = !selected[i];
-			fileBox.setFillColor(selected[i] == 0 ? bgDarkColor : clickeddColor);
+			select = !select;
+			fileBox.setFillColor(select == 0 ? bgDarkColor : clickeddColor);
 			/*
 			for (int i = 0; i < 5; ++i)
 				std::cout << selected[i] << " ";
@@ -143,7 +144,7 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 		}
 	}
 	else {
-		fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
+		fileBox.setFillColor(select == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 	}
 	window.draw(fileBox);
 
@@ -167,7 +168,7 @@ void drawBackFatherPath(sf::RenderWindow& window, bool side, bool& view_mode, st
 void create_files(std::string& currentPath, folder files[],int k)
 {
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
-	int i=k;
+	int i=0;
 	
 	try {
 		for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
@@ -197,7 +198,7 @@ void create_files(std::string& currentPath, folder files[],int k)
 	}
 }
 
-void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY,folder files[]) {
+void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath,  int index, std::string fileName, std::string ext, sf::Event& event, bool& scrolled, float& offsetY,folder files[], int ind) {
 	sf::RectangleShape fileBox(sf::Vector2f(window.getSize().x / 2, 30.f));
 	fileBox.setFillColor(view_mode == 0 ? bgLightColor : bgDarkColor);
 	fileBox.setPosition(0.f + window.getSize().x / 2 * side, offsetY + index);
@@ -205,10 +206,10 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 	sf::FloatRect iconBoxRect = fileBox.getGlobalBounds();
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
-	int i = index / 30;
+	int i = index / 30 - ind;
 
 	if (iconBoxRect.contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)) && fileBox.getPosition().y >= 200.f && fileBox.getPosition().y <= 660.f) {
-		fileBox.setFillColor(selected[i] == 0 ? hoverrColor : clickeddColor);
+		fileBox.setFillColor(files[i].selected == 0 ? hoverrColor : clickeddColor);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 			if (isDoubleClick(window)) {
 				std::cout << "Double click!\n";
@@ -219,7 +220,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 				else if (ext == "") {
 					if (canOpenFolder(files[i].path_file)) {
 
-						currentPath = files[i].path_file, offsetY = 200.f, clearSelected(selected);
+						currentPath = files[i].path_file, offsetY = 200.f, clearSelected(files);
 
 						
 					}
@@ -233,10 +234,10 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 					std::string command = "start \"\" \"" + filePath + "\""; ///because of spaces in file name, the shell might not recognize
 					std::system(command.c_str());
 				}
-				clearSelected(selected);
+				clearSelected(files);
 			}
-			selected[i] = !selected[i];
-			fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
+			files[i].selected = !files[i].selected;
+			fileBox.setFillColor(files[i].selected == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 			/*
 			for (int i = 0; i < 5; ++i)
 				std::cout << selected[i] << " ";
@@ -246,7 +247,7 @@ void listFile(sf::RenderWindow& window, bool side, bool& view_mode, std::string&
 		}
 	}
 	else {
-		fileBox.setFillColor(selected[i] == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
+		fileBox.setFillColor(files[i].selected == 0 ? view_mode == 0 ? bgLightColor : bgDarkColor : clickeddColor);
 	}
 	window.draw(fileBox);
 	///--------switch(fileExtension)
@@ -313,34 +314,37 @@ bool mouseOnFiles(sf::RenderWindow& window, float minX, float minY, float maxX, 
 	return false;
 }
 
-
-
-void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath, static bool selected[], sf::Event& event, bool& scrolled, float& offsetY, int sort_buttons0[], int sort_buttons1[]) {
+void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std::string& currentPath,  sf::Event& event, bool& scrolled, float& offsetY, int sort_buttons0[], int sort_buttons1[],folder files1[],folder files2[]) {
 	
-	folder files[1000];
 	int numberOfFiles = getNumberOfFilesFromDir(currentPath);
+	int noFI = numberOfFiles;
 	int inde=0;
 	int index = 0;
 	if (currentPath.size() > 3) {
 		inde = 1;
 		index = 1;
-		numberOfFiles++;
-		drawBackFatherPath(window, side, view_mode, currentPath, selected);
+		if(side==0)drawBackFatherPath(window, side, view_mode, currentPath, files1);
+		else drawBackFatherPath(window, side, view_mode, currentPath, files2);
 	}
-	else inde = 0, index = 0;
-	create_files(currentPath, files,index);
+	else inde = 0, index = 0, numberOfFiles--;
+	if(side==0)create_files(currentPath, files1,0);
+	else create_files(currentPath, files2, 0);
+	
 	for (int i = 0; i < 4; i++)
 	{
 		if (side == 0)
 		{
-			choose_sort(sort_buttons0[i], i, files, numberOfFiles);
+			choose_sort(sort_buttons0[i], i, files1, noFI,0);
 		}
 		if (side == 1)
 		{
-			choose_sort(sort_buttons1[i], i, files, numberOfFiles);
+			choose_sort(sort_buttons1[i], i, files2, noFI,0);
 		}
 	}
-	for (int i = index; i < numberOfFiles;i++) {
+	
+	/*
+	*/
+	for (int i = index; i <= numberOfFiles;i++) {
 			//offsetY = 200.f;
 			if (event.type == sf::Event::MouseWheelScrolled && mouseOnFiles(window, 0.f, 200.f, 1280.f, 675.f)) {
 				if((side == 0 && mouseOnFiles(window, 0, 200.f, 635.f, 675.f)) || (side == 1 && mouseOnFiles(window, 636.f, 200.f, 1280.f, 675.f)))
@@ -376,8 +380,8 @@ void drawFilesFromDir(sf::RenderWindow& window, bool side, bool& view_mode, std:
 			else if (!window.pollEvent(event))
 				scrolled = false;
 
-			listFile(window, side, view_mode, currentPath, selected, i * 30.f, files[i].name, files[i].extension, event, scrolled, offsetY,files);
-			
+			if(side==0)listFile(window, side, view_mode, currentPath, i * 30.f, files1[i - index].name, files1[i - index].extension, event, scrolled, offsetY,files1, index);
+			else listFile(window, side, view_mode, currentPath, i * 30.f, files2[i - index].name, files2[i - index].extension, event, scrolled, offsetY, files2, index);
 		}
 	
 

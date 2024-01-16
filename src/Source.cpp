@@ -26,9 +26,11 @@ bool scrolled = false;
 float offsetY1 = 200.f;
 float offsetY2 = 200.f;
 bool lastClickedSide = 0;
-
-
+bool sorted = false;
+folder files1[1000];
+folder files2[1000];
 int main() {
+	
 	//Rendering window
 	sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), "File Maestro");
 
@@ -66,27 +68,28 @@ int main() {
 				window.close();
 				return EXIT_SUCCESS;
 			}
+			
 		}
+		
 		window.clear(light_dark_mode == 0 ? sf::Color::White : sf::Color::Black);
 		///
 		///the drawing stage
 		/// 
 		drawFileBackground(window, 0, light_dark_mode);
 		drawFileBackground(window, 1, light_dark_mode);
-		static bool selectedFiles1[205] = { 0 };
-		static bool selectedFiles2[205] = { 0 };
 		
-		drawFilesFromDir(window, 0, light_dark_mode, currentPath, selectedFiles1, event, scrolled, offsetY1, sort_buttons0, sort_buttons1);
-		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, selectedFiles2, event, scrolled, offsetY2, sort_buttons0, sort_buttons1);
+		drawFilesFromDir(window, 0, light_dark_mode, currentPath, event, scrolled, offsetY1, sort_buttons0, sort_buttons1,files1,files2);
+		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, event, scrolled, offsetY2, sort_buttons0, sort_buttons1,files1,files2);
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1, offsetY1, offsetY2);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2, offsetY1, offsetY2);
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);
-		lastClickedSide == 0 ? drawCommandButtons(window, light_dark_mode, currentPath, selectedFiles1) : drawCommandButtons(window, light_dark_mode, currentPath2, selectedFiles2);
-		loadSortBar(window, light_dark_mode, 0, sort_buttons0, sort_buttons1);
-		loadSortBar(window, light_dark_mode, 1, sort_buttons0, sort_buttons1);
+		lastClickedSide == 0 ? drawCommandButtons(window, light_dark_mode, currentPath, files1,event) : drawCommandButtons(window, light_dark_mode, currentPath2, files2,event);
+		loadSortBar(window, light_dark_mode, 0, sort_buttons0, sort_buttons1, files1);
+		loadSortBar(window, light_dark_mode, 1, sort_buttons0, sort_buttons1, files2);
+		
 		window.display();
 		
 	}

@@ -6,6 +6,8 @@
 #include <map>
 #include "textureCache.h"
 
+
+
 bool isDoubleClick( sf::RenderWindow& window);
 
 sf::Texture& getTexture(const std::string& filePath);

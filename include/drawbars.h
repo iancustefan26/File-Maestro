@@ -2,6 +2,7 @@
 #define DRAWBARS_H
 #include <SFML/Graphics.hpp>
 #include "filesize.h"
+#include "fileNavigator.h"
 
 void loadToolbar(sf::RenderWindow& window, bool& view_mode);
 
@@ -11,6 +12,6 @@ void loadBetweenLine(sf::RenderWindow& window, bool& view_mode);
 
 void loadPathBar(sf::RenderWindow& window, bool &view_mode, bool side, sf::Event &event, std::string &currentPath);
 
-void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side,int sort_buttons0[], int sort_buttons1[]);
+void loadSortBar(sf::RenderWindow& window, bool& view_mode, bool side,int sort_buttons0[], int sort_buttons1[], folder files[]);
 
 #endif
