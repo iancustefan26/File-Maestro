@@ -34,6 +34,11 @@ void drawIconBoxesToolbar(sf::RenderWindow& window, const float index, bool& vie
         iconBox.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             iconBox.setFillColor(clickedColor);
+            if (index == 0) {
+                window.clear(view_mode == 1 ? sf::Color::White : sf::Color::Black);
+                std::this_thread::sleep_for(std::chrono::milliseconds(60));
+                window.clear(view_mode == 0 ? sf::Color::White : sf::Color::Black);
+            }
             if (index == 70) {
                 system("cmd /c start cmd");
                 std::cout << "Opened CMD" << "\n";
