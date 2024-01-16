@@ -78,7 +78,7 @@ void open(std::string &currentPath, folder files[], sf::RenderWindow& window, bo
 void copyFilesOn(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode)
 {
     int i = 0;
-    if (exists(destination)) {
+    if (!exists(destination)) {
         std::cerr << "Destination directory doesn't exist ." << std::endl;
         return ;
     }
@@ -247,7 +247,7 @@ void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& vie
 void MoveFilesTo(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode)
 {
     int i = 0;
-    if (exists(destination)) {
+    if (!exists(destination)) {
         std::cerr << "Destination directory doesn't exist ." << std::endl;
         return;
     }
