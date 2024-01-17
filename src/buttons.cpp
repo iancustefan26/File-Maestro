@@ -84,7 +84,8 @@ void copyFilesOn(folder files[], std::string destination, std::string currentPat
     }
     for (const auto& entry : directory_iterator(currentPath)) {
         const path& sourcePath = entry.path();
-        const path destPath = destination / sourcePath.filename();
+        std::string dest= destination + "/" + sourcePath.filename().string();
+        const path destPath = dest;
         if (Selected[i])
         {
             try {
@@ -172,7 +173,7 @@ void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& vie
     inputText.setCharacterSize(18);
     inputText.setFillColor(view_mode == 0 ? sf::Color::Black : sf::Color::White);
     inputText.setPosition(65.f, 55.f);
-    std::string inputString = currentPath ;
+    std::string inputString = currentPath;
     inputText.setString(inputString);
 
     static bool selectedBar = 0;
@@ -249,6 +250,7 @@ void MoveFilesTo(folder files[], std::string destination, std::string currentPat
     int i = 0;
     if (!exists(destination)) {
         std::cerr << "Destination directory doesn't exist ." << std::endl;
+        std::cout << destination << "\n";
         return;
     }
     for (const auto& entry : directory_iterator(currentPath)) {
