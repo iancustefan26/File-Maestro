@@ -48,7 +48,7 @@ int main() {
 		std::cerr << "Error when loading the window icon!" << "\n";
 		return EXIT_FAILURE;
 	}
-	
+	static bool Selected[250], Selected1[250];
 	///The main window loop
 	bool light_dark_mode = 1;
 	//create_files(currentPath, files);
@@ -68,6 +68,40 @@ int main() {
 				window.close();
 				return EXIT_SUCCESS;
 			}
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::F4 && event.key.alt) {
+					window.close();
+				}
+			}
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::F5 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+					if(lastClickedSide==0)renderF5_MOVE(window, currentPath, light_dark_mode, files1, Selected);
+					else renderF5_MOVE(window, currentPath, light_dark_mode, files2, Selected1);
+				}
+			}
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::F3 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+					if(lastClickedSide==0 )open(currentPath, files1, window, light_dark_mode, Selected);
+					else open(currentPath, files2, window, light_dark_mode, Selected1);
+				}
+			}
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::F6 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+					 renderF6_NEW(window, currentPath, light_dark_mode);
+				}
+			}
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::F7 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+					if(lastClickedSide==0) deleteFiles(files1, currentPath, Selected);
+					else deleteFiles(files2, currentPath, Selected1);
+				}
+			}
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::F4 && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+					if(lastClickedSide==0) renderF4_COPY(window, currentPath, light_dark_mode, files1, Selected);
+					else renderF4_COPY(window, currentPath, light_dark_mode, files2, Selected1);
+				}
+			}
 			
 		}
 		
@@ -78,17 +112,17 @@ int main() {
 		drawFileBackground(window, 0, light_dark_mode);
 		drawFileBackground(window, 1, light_dark_mode);
 		
-		drawFilesFromDir(window, 0, light_dark_mode, currentPath, event, scrolled, offsetY1, sort_buttons0, sort_buttons1,files1,files2);
-		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, event, scrolled, offsetY2, sort_buttons0, sort_buttons1,files1,files2);
+		drawFilesFromDir(window, 0, light_dark_mode, currentPath, event, scrolled, offsetY1, sort_buttons0, sort_buttons1,files1,files2,Selected);
+		drawFilesFromDir(window, 1, light_dark_mode, currentPath2, event, scrolled, offsetY2, sort_buttons0, sort_buttons1,files1,files2,Selected1);
 		loadToolbar(window, light_dark_mode);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk, 0, currentPath, selected1, offsetY1, offsetY2);
 		loadDiskSelection(window, numberOfDrives, light_dark_mode, currentDisk2, 1, currentPath2, selected2, offsetY1, offsetY2);
 		loadPathBar(window, light_dark_mode, 0, event, currentPath);
 		loadPathBar(window, light_dark_mode, 1, event, currentPath2);
 		loadBetweenLine(window, light_dark_mode);
-		lastClickedSide == 0 ? drawCommandButtons(window, light_dark_mode, currentPath, files1,event) : drawCommandButtons(window, light_dark_mode, currentPath2, files2,event);
-		loadSortBar(window, light_dark_mode, 0, sort_buttons0, sort_buttons1, files1);
-		loadSortBar(window, light_dark_mode, 1, sort_buttons0, sort_buttons1, files2);
+		lastClickedSide == 0 ? drawCommandButtons(window, light_dark_mode, currentPath, files1,event,Selected) : drawCommandButtons(window, light_dark_mode, currentPath2, files2,event,Selected1);
+		loadSortBar(window, light_dark_mode, 0, sort_buttons0, sort_buttons1, files1,Selected);
+		loadSortBar(window, light_dark_mode, 1, sort_buttons0, sort_buttons1, files2,Selected1);
 		
 		window.display();
 		
