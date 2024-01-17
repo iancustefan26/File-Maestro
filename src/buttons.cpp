@@ -83,9 +83,8 @@ void copyFilesOn(folder files[], std::string destination, std::string currentPat
         return ;
     }
     for (const auto& entry : directory_iterator(currentPath)) {
-        const path& sourcePath = entry.path();
-        std::string dest= destination + "/" + sourcePath.filename().string();
-        const path destPath = dest;
+        const path& sourcePath = entry.path(); 
+        const path destPath = destination/ sourcePath.filename();
         if (Selected[i])
         {
             try {
