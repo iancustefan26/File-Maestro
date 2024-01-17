@@ -9,13 +9,16 @@
 #include "fileNavigator.h"
 #include "usable.h"
 #include "drawbars.h"
+
 using namespace std::filesystem;
+
 sf::Color bbgDarkColor(89, 87, 87);
 sf::Color bdefaulttDarkColor(51, 53, 54);
 sf::Color bbgLightColor(199, 199, 199);
 sf::Color bGrayish(160, 160, 160);
 sf::Color bhoverrColor(7, 148, 224, 128);
 sf::Color bclickeddColor(224, 20, 75);
+
 void deleteFiles(folder files[], std::string currentPath,static bool Selected[]) {
     int i = 0;
     std::cout << "\n";
@@ -42,6 +45,7 @@ void deleteFiles(folder files[], std::string currentPath,static bool Selected[])
     }
     clearSelected(files,Selected);
 }
+
 void open(std::string &currentPath, folder files[], sf::RenderWindow& window, bool& view_mode,static bool Selected[]) {
     int ct = 0;
     for (int i = 0; i < 204; ++i)
@@ -75,6 +79,7 @@ void open(std::string &currentPath, folder files[], sf::RenderWindow& window, bo
         ct++;
     }
 }
+
 void copyFilesOn(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode,static bool Selected[])
 {
     int i = 0;
@@ -134,6 +139,8 @@ void copyFilesOn(folder files[], std::string destination, std::string currentPat
             win.display();
         }
 }
+
+
 void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& view_mode, folder files[],static bool Selected[]) {
     sf::RenderWindow F4_Window(sf::VideoMode(500.f, 150.f), "CopyFile");
     F4_Window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
@@ -244,6 +251,8 @@ void renderF4_COPY(sf::RenderWindow& window, std::string& currentPath, bool& vie
         F4_Window.display();
     }
 }
+
+
 void MoveFilesTo(folder files[], std::string destination, std::string currentPath, sf::RenderWindow& window, bool& view_mode,static bool Selected[])
 {
     int i = 0;
@@ -304,6 +313,8 @@ void MoveFilesTo(folder files[], std::string destination, std::string currentPat
         win.display();
     }
 }
+
+
 void renderF5_MOVE(sf::RenderWindow& window, std::string& currentPath, bool& view_mode,folder files[],static bool Selected[]) {
     sf::RenderWindow F5_Window(sf::VideoMode(500.f, 150.f), "MoveFile");
     F5_Window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
@@ -414,6 +425,8 @@ void renderF5_MOVE(sf::RenderWindow& window, std::string& currentPath, bool& vie
         F5_Window.display();
     }
 }
+
+
 void renderF6_NEW(sf::RenderWindow& window, std::string& currentPath, bool& view_mode) {
     sf::RenderWindow F6_Window(sf::VideoMode(500.f, 150.f), "NewFile");
     F6_Window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - 400 / 2,
@@ -558,6 +571,8 @@ void renderF6_NEW(sf::RenderWindow& window, std::string& currentPath, bool& view
         F6_Window.display();
     }
 }
+
+
 void makeButton(sf::RenderWindow& window, std::string name, int index,bool& view_mode, std::string &currentPath, folder files[],sf::Event event,static bool Selected[]) {
     sf::Color default_dark_Color(51, 53, 54);
     sf::Color default_light_Color(160, 160, 160);
