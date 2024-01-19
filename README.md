@@ -23,7 +23,7 @@
  - Open every type of file and folder
  - **Advanced Features:**
 - -   _Search Functionality:_ Quickly locate specific files or folders with the powerful 	  search feature.
-- - _Sorting functionality:_Arrange your files and folders based on various criteria such as name, size and date modified
+- -   _Sorting functionality:_ Arrange your files and folders based on various criteria such as name, size and date modified
 - -   _Customization:_ Tailor File Maestro to your preferences with customizable themes.
 -  **Convenient Toolbar Menu**
 
