@@ -107,7 +107,7 @@ If you'd like to run this website locally:
    ```
  4. Add the linker settings to the source files
  5. ``g++ -o Source Source.cpp``
- 6. ``/Source``
+ 6. ``./Source``
    
 ## How to download
 
