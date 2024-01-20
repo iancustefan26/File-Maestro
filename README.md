@@ -95,7 +95,7 @@ Arrange your files and folders based on various criteria such as name, size and 
 
 ## How to Run Locally
 
-If you'd like to run this website locally:
+If you'd like to run this program locally:
 
 1. You need a newer version of C++ (C++17 or better)
 
