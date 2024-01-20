@@ -105,7 +105,7 @@ If you'd like to run this website locally:
    ```bash
    git clone https://github.com/iancustefan26/File-Maestro.git
    ```
- 4. Add the linker settings to the source files
+ 4. Add the linker settings to point to the source files and include files
  5. ``g++ -o Source Source.cpp``
  6. ``./Source``
    
