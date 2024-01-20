@@ -1,5 +1,5 @@
 
-   ![enter image description here](https://i.imgur.com/9uQAlnj.png)
+   ![](https://i.imgur.com/9uQAlnj.png)
 
 
 
@@ -11,7 +11,7 @@
 
 
 
-![enter image description here](https://i.imgur.com/MPxm4sw.png)
+![](https://i.imgur.com/MPxm4sw.png)
 
 
 # Key Features
@@ -54,7 +54,7 @@ You will use the command buttons on the bottom, or the specific shortcut keys:
  - `CTRL + F4 Move`
  - `CTRL + F5 Copy`
  *for this two,  a new pop-up window will open to type in the destination*
- ![enter image description here](https://i.imgur.com/88BahXm.png)![enter image description here](https://i.imgur.com/wddYzmb.png)
+ ![](https://i.imgur.com/88BahXm.png)![enter image description here](https://i.imgur.com/wddYzmb.png)
 
 
 
@@ -62,7 +62,7 @@ You will use the command buttons on the bottom, or the specific shortcut keys:
 
 Enhance the user experience of the application with Dark and Light Theme modes! This program provides an easy-to-use appearance toggle, allowing users to switch between dark and light color schemes based on their preferences.
 
-![enter image description here](https://i.imgur.com/zIbL2a8.png)
+![](https://i.imgur.com/zIbL2a8.png)
 
 
 
@@ -79,7 +79,7 @@ Arrange your files and folders based on various criteria such as name, size and 
 
  - Click on the sort buttons, <span style="color:blue">*blue*</span> text means **Ascending** and <span style="color:red">*red*</span> text means **Descending**
  - You can combine the sorting criterias
-![enter image description here](https://i.imgur.com/oolYOWT.png)
+![](https://i.imgur.com/oolYOWT.png)
 
 ## A brief view to the exploring
 
