@@ -60,7 +60,7 @@ You will use the command buttons on the bottom, or the specific shortcut keys:
 
 ## Dark and Light Theme mode
 
-Enhance the user experience of the application with Dark and Light Theme modes! This program provides an easy-to-use appearance toggle, allowing users to switch between dark and light color schemes based on their preferences.
+Enhanced the user experience of the application with Dark and Light Theme modes! This program provides an easy-to-use appearance toggle, allowing users to switch between dark and light color schemes based on their preferences.
 
 ![](https://i.imgur.com/zIbL2a8.png)
 
